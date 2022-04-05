@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning1.摘要 Abstract—Despite that deep learning has achieved state-of-the-art performance for">
+<meta property="og:type" content="article">
+<meta property="og:title" content="anno">
+<meta property="og:url" content="https://herbstlicherwind.github.io/2022/04/05/anno/index.html">
+<meta property="og:site_name" content="Dreamland">
+<meta property="og:description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning1.摘要 Abstract—Despite that deep learning has achieved state-of-the-art performance for">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-04-05T12:45:08.000Z">
+<meta property="article:modified_time" content="2022-04-05T12:45:43.093Z">
+<meta property="article:author" content="Yinghao Wang">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://herbstlicherwind.github.io/2022/04/05/anno/"/>
+
+
+
+
+
+  <title>anno | Dreamland</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dreamland</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://herbstlicherwind.github.io/2022/04/05/anno/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dreamland">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">anno</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-04-05T20:45:08+08:00">
+                2022-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning"><a href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning" class="headerlink" title="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning"></a>Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning</h1><h2 id="1-摘要"><a href="#1-摘要" class="headerlink" title="1.摘要"></a>1.摘要</h2><blockquote>
+<p>Abstract—Despite that deep learning has achieved state-of-the-art performance for medical image segmentation, its success relies on a large set of manually annotated images for training that are expensive to acquire. In this paper, we propose an annotationefficient learning framework for segmentation tasks that avoids annotations of training images, where we use an improved CycleConsistent Generative Adversarial Network (GAN) to learn from a set of unpaired medical images and auxiliary masks obtained either from a shape model or public datasets. We first use the GAN to generate pseudo labels for our training images under the implicit high-level shape constraint represented by a Variational Auto-encoder (VAE)-based discriminator with the help of the auxiliary masks, and build a Discriminator-guided<br>Generator Channel Calibration (DGCC) module which employs our discriminator’s feedback to calibrate the generator for better pseudo labels. To learn from the pseudo labels that are noisy,<br>we further introduce a noise-robust iterative learning method using noise-weighted Dice loss. We validated our framework with two situations: objects with a simple shape model like optic<br>disc in fundus images and fetal head in ultrasound images, and complex structures like lung in X-Ray images and liver in CT images. Experimental results demonstrated that 1) Our VAEbased discriminator and DGCC module help to obtain highquality pseudo labels. 2) Our proposed noise-robust learning method can effectively overcome the effect of noisy pseudo labels.3) The segmentation performance of our method without using annotations of training images is close or even comparable to that of learning from human annotations.<br>Index Terms—Segmentation, Deep learning, Annotationefficient, Noisy labels</p>
+</blockquote>
+<p>尽管深度学习在医学图像分割方面取得了一流的性能，但它的成功依赖于大量手动注释的图像进行训练，这些图像的获取成本很高。 在本文中，我们提出了一种用于分割任务的注释高效学习框架，该框架避免了训练图像的注释，我们使用改进的循环一致生成对抗网络 (GAN) 从一组未配对的医学图像和从形状模型或公共数据集获得的辅助掩码中学习。 我们首先在辅助掩码的帮助下，在基于变分自动编码器 (VAE) 的鉴别器所代表的隐式高级形状约束下，使用 GAN 为我们的训练图像生成伪标签，并构建一个鉴别器引导的生成器通道 校准 (DGCC) 模块，它使用我们的鉴别器的反馈来校准生成器以获得更好的伪标签。 为了从有噪声的伪标签中学习，我们进一步介绍了一种使用噪声加权 Dice 损失的抗噪声迭代学习方法。 我们在两种情况下验证了我们的框架：具有简单形状模型的对象，例如眼底图像中的视盘和超声图像中的胎儿头部，以及复杂结构的对象，例如 X 射线图像中的肺和 CT 图像中的肝脏。 实验结果表明：1）我们的基于 VAE 的鉴别器和 DGCC 模块有助于获得高质量的伪标签。 2）我们提出的抗噪声学习方法可以有效地克服噪声伪标签的影响。 3）我们的方法在不使用训练图像注释的情况下的分割性能接近甚至可与从人类注释中学习的方法相媲美。</p>
+<p> 索引词——分割、深度学习、注释效率、噪声标签</p>
+<h2 id="2-面临的问题以及解决方案"><a href="#2-面临的问题以及解决方案" class="headerlink" title="2.面临的问题以及解决方案"></a>2.面临的问题以及解决方案</h2><p><em>问题：</em></p>
+<p><strong>依赖于大量手动注释的图像进行训练：</strong></p>
+<p>这些图像的获取成本很高，因为为分割任务提供像素级注释非常耗时，并且依赖于具有领域知识的专家来实现。 获取高质量的人工注释进行训练是昂贵且劳动密集型的，这已成为开发用于医学图像分割任务的深度学习模型的主要障碍</p>
+<p><em>方案：</em></p>
+<p><strong>提出了一种用于分割任务的注释高效学习框架：避免了训练图像的注释</strong></p>
+<p>该模型从一组辅助掩码中学习，这些辅助掩码可以很容易地获得并与我们的训练图像不配对，因此不需要每个训练图像的手动注释。该框架由新颖的伪标签生成模块和迭代学习模块组成，该模块为每个训练图像获得初始伪分割标签，该迭代学习模块对初始伪标签中的噪声具有鲁棒性。</p>
+<p><strong>提出了一种基于 VAE 的鉴别器：为了获得高质量的伪标签</strong></p>
+<p>该鉴别器鼓励对伪标签进行高级形状约束，并提出了鉴别器引导的生成器通道校准（DGCC）模块来校准通道信息 使用鉴别器反馈的伪标签生成器。</p>
+<p><strong>提出了一种新颖的迭代噪声鲁棒训练方法来学习伪标签：</strong></p>
+<p>其中低质量伪标签被基于标签质量的样本选择（LQSS）模块拒绝，并提出了噪声加权 Dice 损失来提升 最终分割模型的性能。</p>
+<h2 id="3-涉及到的主要知识"><a href="#3-涉及到的主要知识" class="headerlink" title="3.涉及到的主要知识"></a>3.涉及到的主要知识</h2><h3 id="3-1-CycleGAN"><a href="#3-1-CycleGAN" class="headerlink" title="3.1 CycleGAN"></a>3.1 CycleGAN</h3><h3 id="3-2-自分自编码器VAE"><a href="#3-2-自分自编码器VAE" class="headerlink" title="3.2 自分自编码器VAE"></a>3.2 自分自编码器VAE</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/02/01/sjwl/" rel="next" title="神经网络">
+                <i class="fa fa-chevron-left"></i> 神经网络
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="2822328563@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning"><span class="nav-number">1.</span> <span class="nav-text">Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%91%98%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">1.摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">2.面临的问题以及解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E4%B8%BB%E8%A6%81%E7%9F%A5%E8%AF%86"><span class="nav-number">1.3.</span> <span class="nav-text">3.涉及到的主要知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CycleGAN"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 CycleGAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%87%AA%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8VAE"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 自分自编码器VAE</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yinghao Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

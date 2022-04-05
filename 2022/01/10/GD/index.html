@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、梯度下降1.算法简介梯度下降（Gradient Descent）是迭代法的一种，在求解机器学习算法的模型参数，即无约束优化问题时，梯度下降是最常采用的方法之一，另一种常用的方法是最小二乘法。在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。反过来，如果我们需要求解损失函数的最大值，这时就需要用梯度上升法来迭代了。在机器学习中，基于基本的梯度下降">
+<meta property="og:type" content="article">
+<meta property="og:title" content="梯度下降">
+<meta property="og:url" content="https://herbstlicherwind.github.io/2022/01/10/GD/index.html">
+<meta property="og:site_name" content="Dreamland">
+<meta property="og:description" content="一、梯度下降1.算法简介梯度下降（Gradient Descent）是迭代法的一种，在求解机器学习算法的模型参数，即无约束优化问题时，梯度下降是最常采用的方法之一，另一种常用的方法是最小二乘法。在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。反过来，如果我们需要求解损失函数的最大值，这时就需要用梯度上升法来迭代了。在机器学习中，基于基本的梯度下降">
+<meta property="og:locale">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/01/10/GD/image-20220210022759503.png">
+<meta property="article:published_time" content="2022-01-10T12:38:47.000Z">
+<meta property="article:modified_time" content="2022-02-09T18:28:07.306Z">
+<meta property="article:author" content="Yinghao Wang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://herbstlicherwind.github.io/2022/01/10/GD/image-20220210022759503.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://herbstlicherwind.github.io/2022/01/10/GD/"/>
+
+
+
+
+
+  <title>梯度下降 | Dreamland</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dreamland</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://herbstlicherwind.github.io/2022/01/10/GD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dreamland">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">梯度下降</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-10T20:38:47+08:00">
+                2022-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <span id="more"></span>
+<h1 id="一、梯度下降"><a href="#一、梯度下降" class="headerlink" title="一、梯度下降"></a>一、梯度下降</h1><h2 id="1-算法简介"><a href="#1-算法简介" class="headerlink" title="1.算法简介"></a>1.算法简介</h2><p>梯度下降（Gradient Descent）是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/迭代法/10913188">迭代法</a>的一种，在求解机器学习算法的模型参数，即无约束优化问题时，梯度下降是最常采用的方法之一，另一种常用的方法是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/最小二乘法/2522346">最小二乘法</a>。在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。反过来，如果我们需要求解损失函数的最大值，这时就需要用梯度上升法来迭代了。在机器学习中，基于基本的梯度下降法发展了两种梯度下降方法，分别为随机梯度下降法和批量梯度下降法。<br>简而言之，梯度下降法的计算过程就是沿梯度下降的方向求解极小值（也可以沿梯度上升方向求解极大值），本文主要以线性回归方程为例介绍梯度下降。</p>
+<h2 id="2-算法内容"><a href="#2-算法内容" class="headerlink" title="2.算法内容"></a>2.算法内容</h2><h3 id="2-1-梯度"><a href="#2-1-梯度" class="headerlink" title="2.1 梯度"></a>2.1 梯度</h3><p><a target="_blank" rel="noopener" href="https://www.baidu.com/link?url=TJqkdxNul1fl2sozBGoGHqAkqZBVDPoDgke4ijGdrE2O1alsvNXYjSnxe0UH7d44uoHeWrv3cakPtwZca3gbX6ARkM8fcVpxHq7YxD3Tqn3&amp;wd=&amp;eqid=e520efc5000b33310000000361e92ade">梯度</a>的本意是一个向量（矢量），表示某一函数在该点处的方向导数沿着该方向取得最大值，即函数在该点处沿着该方向（此梯度的方向）变化最快，变化率最大（为该梯度的模），最容易找到最大值，相反也容易取负而找到最小值。</p>
+<h3 id="2-2-核心公式"><a href="#2-2-核心公式" class="headerlink" title="2.2 核心公式"></a>2.2 核心公式</h3><script type="math/tex; mode=display">
+θ_j:=θ_j-a\frac{∂}{∂θ_j}J(θ)\tag 1</script><p>这里:=意为赋值，alpha为学习率/步长，需要取一个合适的值，方法这里暂不赘述。</p>
+<h3 id="2-3-算法步骤"><a href="#2-3-算法步骤" class="headerlink" title="2.3 算法步骤"></a>2.3 算法步骤</h3><p>通俗理解，就是我们在大山上要下山，于是一步一步下山，每次沿着最陡峭的位置向下走一步直到走到山脚；体现到函数图像上，就是找到最小值(极小值)。</p>
+<h4 id="2-3-1-代数法"><a href="#2-3-1-代数法" class="headerlink" title="2.3.1 代数法"></a>2.3.1 代数法</h4><p>基本思想是：给定一个函数y，假定其只有一个极小值，给定初始参数(x0,x1,x2,…,xn)，首先求当前位置的各个偏导数，然后利用式(1)修改参数的值，重复进行上述步骤直到参数值变化程度足够小，结束。</p>
+<p>以多元线性回归方程为示例：</p>
+<script type="math/tex; mode=display">
+h(x_0,x_1,x_2,...,x_n)=\sum^n_{i=0}θ_ix_i</script><p>构造损失函数为</p>
+<script type="math/tex; mode=display">
+J=\frac{1}{2m}\sum^m_{i=1}(y_i-h(x_{0(i)},x_{1(i)},x_{2(i)},...,x_{n(i)})^2</script><p>1）确定当前位置的损失函数的梯度；</p>
+<p>对各个theta求偏导得</p>
+<script type="math/tex; mode=display">
+\frac{∂J}{∂\theta_j}=-\frac{1}{m}\sum^m_{i=1}(y_i-h(x_{0(i)},x_{1(i)},x_{2(i)},...,x_{n(i)})x_{j(i)}</script><p>2）用步长乘以损失函数的梯度得到下降的长度，即参数更新的值；</p>
+<script type="math/tex; mode=display">
+a\frac{∂J}{∂\theta_j}=-a\frac{1}{m}\sum^m_{i=1}(y_i-h(x_{0(i)},x_{1(i)},x_{2(i)},...,x_{n(i)})x_{j(i)}</script><p>3）确定是否所有的参数，梯度下降的距离都小于阈值，如果是则算法终止，当前所有的参数即为最终结果，否则进入步骤4；</p>
+<p>4）更新所有的参数，对于每一个参数，其更新表达式如下，更新完毕后继续转入步骤1</p>
+<script type="math/tex; mode=display">
+\theta_j:=\theta_j-a\frac{1}{m}\sum^m_{i=1}(y_i-h(x_{0(i)},x_{1(i)},x_{2(i)},...,x_{n(i)})x_{j(i)}</script><h4 id="2-3-2-矩阵法"><a href="#2-3-2-矩阵法" class="headerlink" title="2.3.2 矩阵法"></a>2.3.2 矩阵法</h4><p>依然以多元线性回归方程为例：</p>
+<script type="math/tex; mode=display">
+h(x_0,x_1,x_2,...,x_n)=\sum^n_{i=0}θ_ix_i=θ^TX</script><p>将训练集数据特征作为一个矩阵：</p>
+<script type="math/tex; mode=display">
+X=\left[
+ \begin{matrix}
+   x_1^T   \\
+   x_2^T  \\
+   x_3^T\\
+   ...\\
+   x_n^T
+  \end{matrix}
+  \right]</script><p>得到的每个结果作为一个矩阵</p>
+<script type="math/tex; mode=display">
+\widehat y=\left[
+ \begin{matrix}
+   y_1   \\
+   y_2  \\
+   y_3\\
+   ...\\
+   y_n
+  \end{matrix}
+  \right]</script><script type="math/tex; mode=display">
+h_\theta(x_i)=x_i^T\theta=X^T\theta</script><script type="math/tex; mode=display">
+X\theta-\widehat y=\left[
+ \begin{matrix}
+   x_1^T\theta   \\
+   x_2^T\theta   \\
+   x_3^T\theta \\
+   ...\\
+   x_n^T\theta 
+  \end{matrix}
+  \right]-\left[
+ \begin{matrix}
+   y_1   \\
+   y_2  \\
+   y_3\\
+   ...\\
+   y_n
+  \end{matrix}
+  \right]=\left[
+ \begin{matrix}
+   h_\theta(x_1)-y_1   \\
+     h_\theta(x_2)-y_2  \\
+     h_\theta(x_3)-y_3\\
+   ...\\
+     h_\theta(x_n)-y_n
+  \end{matrix}
+  \right]</script><script type="math/tex; mode=display">
+J(θ)=\frac{1}{2m}\sum_{i=1}^m(h_θ(x_i)-y_i)^2=\frac{1}{2m}(X\theta-\widehat y)^T(X\theta-\widehat y)</script><p>对上式求导，利用线性代数知识得到：</p>
+<script type="math/tex; mode=display">
+▽J(\theta)=X^TX\theta-X^T\widehat y=X^T(X\theta-\widehat y)</script><script type="math/tex; mode=display">
+\theta:=\theta-aX^T(X\theta-\widehat y)</script><h3 id="2-4-常用的梯度下降法类别"><a href="#2-4-常用的梯度下降法类别" class="headerlink" title="2.4 常用的梯度下降法类别"></a>2.4 常用的梯度下降法类别</h3><h4 id="2-4-1-批量梯度下降法（Batch-Gradient-Descent）"><a href="#2-4-1-批量梯度下降法（Batch-Gradient-Descent）" class="headerlink" title="2.4.1 批量梯度下降法（Batch Gradient Descent）"></a>2.4.1 批量梯度下降法（Batch Gradient Descent）</h4><p>批量梯度下降是指在每次迭代时，将所有样本参数都进行更新，这样做的优点是可以得出全局最优解，但如果样本数目很大时，训练速度很慢。</p>
+<p>代码实现如下：</p>
+<p>以预测一元线性回归方程为例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> <span class="built_in">pow</span></span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> uniform</span><br><span class="line"></span><br><span class="line">x = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>]</span><br><span class="line">y = [<span class="number">100</span>,<span class="number">111</span>,<span class="number">130</span>,<span class="number">144</span>,<span class="number">149</span>,<span class="number">166</span>,<span class="number">179</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#线性回归函数为 y=theta0+theta1*x</span></span><br><span class="line"><span class="comment">#参数定义</span></span><br><span class="line">theta0 = uniform(<span class="number">0</span>,<span class="number">2</span>)<span class="comment">#对 theata0 随机赋值</span></span><br><span class="line">theta1 = uniform(<span class="number">0</span>,<span class="number">2</span>)<span class="comment">#对 theata1 随机赋值</span></span><br><span class="line">alpha = <span class="number">0.1</span><span class="comment">#学习率</span></span><br><span class="line">m = <span class="built_in">len</span>(x)</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line">loss = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line">    diss = <span class="number">0</span>   <span class="comment">#误差</span></span><br><span class="line">    deriv0 = <span class="number">0</span> <span class="comment">#对 theata0 导数</span></span><br><span class="line">    deriv1 = <span class="number">0</span> <span class="comment">#对 theata1 导数</span></span><br><span class="line">    <span class="comment">#求导</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        deriv0 += (theta0+theta1*x[i]-y[i])/m</span><br><span class="line">        deriv1 += ((theta0+theta1*x[i]-y[i])/m)*x[i]</span><br><span class="line">    <span class="comment">#更新 theta0 和 theta1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        theta0 = theta0 - alpha*((theta0+theta1*x[i]-y[i])/m) </span><br><span class="line">        theta1 = theta1 - alpha*((theta0+theta1*x[i]-y[i])/m)*x[i]</span><br><span class="line">    <span class="comment">#求损失函数 J (θ)</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        diss = diss + (<span class="number">1</span>/(<span class="number">2</span>*m))*<span class="built_in">pow</span>((theta0+theta1*x[i]-y[i]),<span class="number">2</span>)</span><br><span class="line">    loss.append(diss)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#如果误差已经很小，则退出循环</span></span><br><span class="line">    <span class="keyword">if</span> diss &lt;= <span class="number">0.001</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;本次迭代次数为：&#123;&#125;次，最终得到theta0=&#123;&#125;，theta1=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(count,theta0,theta1))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;本次迭代得到的回归函数是：y=&#123;&#125;+&#123;&#125;*x&quot;</span>.<span class="built_in">format</span>(theta0,theta1))</span><br><span class="line"><span class="comment">#画原始数据图和得到的线性回归函数图</span></span><br><span class="line">matplotlib.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>]</span><br><span class="line">plt.plot(x,y,<span class="string">&#x27;bo&#x27;</span>,label=<span class="string">&#x27;数据&#x27;</span>)</span><br><span class="line">plt.plot(x,[theta0+theta1*x <span class="keyword">for</span> x <span class="keyword">in</span> x],label=<span class="string">&#x27;线性回归函数&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#画损失函数（误差）变化图</span></span><br><span class="line">plt.scatter(<span class="built_in">range</span>(count),loss)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h4 id="2-4-2-随机梯度下降（Stochastic-Gradient-Descent）"><a href="#2-4-2-随机梯度下降（Stochastic-Gradient-Descent）" class="headerlink" title="2.4.2 随机梯度下降（Stochastic Gradient Descent）"></a>2.4.2 随机梯度下降（Stochastic Gradient Descent）</h4><p>随机梯度下降是指每次迭代时只使用一个样本来对参数进行更新，其优点是加快每一轮更新的速度，但是降低了准确率，而且可能会陷入局部最优解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> <span class="built_in">pow</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">x = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>]</span><br><span class="line">y = [<span class="number">100</span>,<span class="number">111</span>,<span class="number">130</span>,<span class="number">144</span>,<span class="number">149</span>,<span class="number">166</span>,<span class="number">179</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#线性回归函数为 y=theta0+theta1*x</span></span><br><span class="line"><span class="comment">#参数定义</span></span><br><span class="line">theta0 = random.uniform(<span class="number">0</span>,<span class="number">2</span>)<span class="comment">#对 theata0 随机赋值</span></span><br><span class="line">theta1 = random.uniform(<span class="number">0</span>,<span class="number">2</span>)<span class="comment">#对 theata1 随机赋值</span></span><br><span class="line">alpha = <span class="number">0.1</span><span class="comment">#学习率</span></span><br><span class="line">m = <span class="built_in">len</span>(x)</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line">loss = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line">    diss = <span class="number">0</span>   <span class="comment">#误差</span></span><br><span class="line">    deriv0 = <span class="number">0</span> <span class="comment">#对 theata0 导数</span></span><br><span class="line">    deriv1 = <span class="number">0</span> <span class="comment">#对 theata1 导数</span></span><br><span class="line">    <span class="comment">#求导</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        deriv0 += (theta0+theta1*x[i]-y[i])/m</span><br><span class="line">        deriv1 += ((theta0+theta1*x[i]-y[i])/m)*x[i]</span><br><span class="line">    <span class="comment">#更新 theta0 和 theta1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m)</span><br><span class="line">        theta0 = theta0 - alpha*((theta0+theta1*x[i]-y[i])/m) </span><br><span class="line">        theta1 = theta1 - alpha*((theta0+theta1*x[i]-y[i])/m)*x[i]</span><br><span class="line">    <span class="comment">#求损失函数 J (θ)：</span></span><br><span class="line">    rand_i = random.randrange(<span class="number">0</span>,m)</span><br><span class="line">    diss = diss + (<span class="number">1</span>/(<span class="number">2</span>*m))*<span class="built_in">pow</span>((theta0+theta1*x[rand_i]-y[rand_i]),<span class="number">2</span>)</span><br><span class="line">    loss.append(diss)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#如果误差已经很小，则退出循环</span></span><br><span class="line">    <span class="keyword">if</span> diss &lt;= <span class="number">0.001</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;本次迭代次数为：&#123;&#125;次，最终得到theta0=&#123;&#125;，theta1=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(count,theta0,theta1))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;本次迭代得到的回归函数是：y=&#123;&#125;+&#123;&#125;*x&quot;</span>.<span class="built_in">format</span>(theta0,theta1))</span><br><span class="line"><span class="comment">#画原始数据图和得到的线性回归函数图</span></span><br><span class="line">matplotlib.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>]</span><br><span class="line">plt.plot(x,y,<span class="string">&#x27;bo&#x27;</span>,label=<span class="string">&#x27;数据&#x27;</span>)</span><br><span class="line">plt.plot(x,[theta0+theta1*x <span class="keyword">for</span> x <span class="keyword">in</span> x],label=<span class="string">&#x27;线性回归函数&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#画损失函数（误差）变化图</span></span><br><span class="line">plt.scatter(<span class="built_in">range</span>(count),loss)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h4 id="2-4-3-小批量梯度下降（Mini-Batch-Gradient-Descent）"><a href="#2-4-3-小批量梯度下降（Mini-Batch-Gradient-Descent）" class="headerlink" title="2.4.3 小批量梯度下降（Mini-Batch Gradient Descent）"></a>2.4.3 小批量梯度下降（Mini-Batch Gradient Descent）</h4><p>以上两种方法的折中，每次迭代对部分样本进行更新。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> <span class="built_in">pow</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">x = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">13</span>]</span><br><span class="line">y = [<span class="number">100</span>,<span class="number">111</span>,<span class="number">130</span>,<span class="number">144</span>,<span class="number">149</span>,<span class="number">166</span>,<span class="number">179</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#目标函数为 y=theta0+theta1*x</span></span><br><span class="line"><span class="comment">#参数定义</span></span><br><span class="line">theta0 = random.uniform(<span class="number">0</span>,<span class="number">2</span>)<span class="comment">#对 theata0 随机赋值</span></span><br><span class="line">theta1 = random.uniform(<span class="number">0</span>,<span class="number">2</span>)<span class="comment">#对 theata1 随机赋值</span></span><br><span class="line">alpha = <span class="number">0.1</span><span class="comment">#学习率</span></span><br><span class="line">m = <span class="built_in">len</span>(x)</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line">loss = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line">    diss = <span class="number">0</span>   <span class="comment">#误差</span></span><br><span class="line">    deriv0 = <span class="number">0</span> <span class="comment">#对 theta0 导数</span></span><br><span class="line">    deriv1 = <span class="number">0</span> <span class="comment">#对 theta1 导数</span></span><br><span class="line">    <span class="comment">#求导</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        deriv0 += (theta0+theta1*x[i]-y[i])/m</span><br><span class="line">        deriv1 += ((theta0+theta1*x[i]-y[i])/m)*x[i]</span><br><span class="line">    <span class="comment">#更新 theta0 和 theta1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        theta0 = theta0 - alpha*((theta0+theta1*x[i]-y[i])/m) </span><br><span class="line">        theta1 = theta1 - alpha*((theta0+theta1*x[i]-y[i])/m)*x[i]</span><br><span class="line">    <span class="comment">#求损失函数 J (θ)</span></span><br><span class="line">    rand_ls = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">3</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        rand_i = random.randrange(<span class="number">0</span>,m)</span><br><span class="line">        rand_ls[i] = rand_i</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> rand_ls:</span><br><span class="line">        diss = diss + (<span class="number">1</span>/(<span class="number">2</span>*m))*<span class="built_in">pow</span>((theta0+theta1*x[i]-y[i]),<span class="number">2</span>)</span><br><span class="line">    loss.append(diss)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#如果误差已经很小，则退出循环</span></span><br><span class="line">    <span class="keyword">if</span> diss &lt;= <span class="number">0.001</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;本次迭代次数为：&#123;&#125;次，最终得到theta0=&#123;&#125;，theta1=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(count,theta0,theta1))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;本次迭代得到的回归函数是：y=&#123;&#125;+&#123;&#125;*x&quot;</span>.<span class="built_in">format</span>(theta0,theta1))</span><br><span class="line"><span class="comment">#画原始数据图和得到的线性回归函数图</span></span><br><span class="line">matplotlib.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>]</span><br><span class="line">plt.plot(x,y,<span class="string">&#x27;bo&#x27;</span>,label=<span class="string">&#x27;数据&#x27;</span>)</span><br><span class="line">plt.plot(x,[theta0+theta1*x <span class="keyword">for</span> x <span class="keyword">in</span> x],label=<span class="string">&#x27;线性回归函数&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#画损失函数（误差）变化图</span></span><br><span class="line">plt.scatter(<span class="built_in">range</span>(count),loss)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-算法优化"><a href="#2-3-算法优化" class="headerlink" title="2.3 算法优化"></a>2.3 算法优化</h3><p><strong>（1）算法的步长选择。</strong>在前面的算法描述中，提到取步长为1，但是实际上取值取决于数据样本，可以多取一些值，从大到小，分别运行算法，看看迭代效果，如果损失函数在变小，说明取值有效，否则要增大步长。步长太大，会导致迭代过快，甚至有可能错过最优解。步长太小，迭代速度太慢，很长时间算法都不能结束。所以算法的步长需要多次运行后才能得到一个较为优的值。</p>
+<p><strong>（2）算法参数的初始值选择。</strong>初始值不同，获得的最小值也有可能不同，因此梯度下降求得的只是局部最小值；当然如果损失函数是凸函数则一定是最优解。由于有局部最优解的风险，需要多次用不同初始值运行算法，关键损失函数的最小值，选择损失函数最小化的初值。</p>
+<p><strong>（3）归一化。</strong>由于样本不同特征的取值范围不一样，可能导致迭代很慢，为了减少特征取值的影响，可以对特征数据归一化。</p>
+<h1 id="二、线性回归简介"><a href="#二、线性回归简介" class="headerlink" title="二、线性回归简介"></a>二、线性回归简介</h1><h2 id="1-一元线性回归"><a href="#1-一元线性回归" class="headerlink" title="1.一元线性回归"></a>1.一元线性回归</h2><p>一个因变量和一个自变量，利用数据集训练一个线性回归方程，无限接近所有的数据点，以此由给定自变量预测因变量</p>
+<script type="math/tex; mode=display">
+h_θ(x)=θ_0+θ_1x
+\tag 1</script><p><img src="/2022/01/10/GD/image-20220210022759503.png" alt="image-20220210022759503"></p>
+<h2 id="2-多元线性回归"><a href="#2-多元线性回归" class="headerlink" title="2.多元线性回归"></a>2.多元线性回归</h2><p>当存在两个自变量时，不难得出线性方程为：</p>
+<script type="math/tex; mode=display">
+h_θ(x)=θ_0+θ_1x_1+θ_2x_2</script><p>取x0=1，类比得到得到一个线性方程统一的形式：</p>
+<script type="math/tex; mode=display">
+h(x)=\sum^n_{i=0}θ_ix_i=θ^TX</script><p>在计算各个特征和结果之间的关系时，假设两者满足线性关系，由每个特征的系数θi体现出该特征对结果的影响程度。</p>
+<p>以上述式(4)为例：若要求得所需线性方程，只需系数θT，以此构造一个损失函数作为所得线性方程的评估标准：</p>
+<script type="math/tex; mode=display">
+J(θ)=\frac{1}{2m}\sum_{i=1}^m(h_θ(x_i)-y_i)^2</script><p>当J(θ)越小时，表明h(x)函数效果越好</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/eczhou/p/3951861.html">线性回归与梯度下降算法</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bluesliuf/article/details/88830198">机器学习方法之线性回归(LR)</a></p>
+<p><a target="_blank" rel="noopener" href="https://jiang-hs.gitee.io/posts/202f1f0f/">梯度下降及线性回归</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29781705">知乎</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/01/07/CF/" rel="next" title="协同过滤">
+                <i class="fa fa-chevron-left"></i> 协同过滤
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/01/15/luojihuigui/" rel="prev" title="逻辑回归">
+                逻辑回归 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="2822328563@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">1.</span> <span class="nav-text">一、梯度下降</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">1.算法简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%AE%97%E6%B3%95%E5%86%85%E5%AE%B9"><span class="nav-number">1.2.</span> <span class="nav-text">2.算法内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A2%AF%E5%BA%A6"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 梯度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 核心公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 算法步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-%E4%BB%A3%E6%95%B0%E6%B3%95"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">2.3.1 代数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-%E7%9F%A9%E9%98%B5%E6%B3%95"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">2.3.2 矩阵法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%B8%B8%E7%94%A8%E7%9A%84%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E7%B1%BB%E5%88%AB"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 常用的梯度下降法类别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-1-%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%EF%BC%88Batch-Gradient-Descent%EF%BC%89"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">2.4.1 批量梯度下降法（Batch Gradient Descent）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-2-%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%EF%BC%88Stochastic-Gradient-Descent%EF%BC%89"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">2.4.2 随机梯度下降（Stochastic Gradient Descent）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-3-%E5%B0%8F%E6%89%B9%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%EF%BC%88Mini-Batch-Gradient-Descent%EF%BC%89"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">2.4.3 小批量梯度下降（Mini-Batch Gradient Descent）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.3 算法优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">二、线性回归简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%80%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">2.1.</span> <span class="nav-text">1.一元线性回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">2.2.</span> <span class="nav-text">2.多元线性回归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">2.2.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yinghao Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
