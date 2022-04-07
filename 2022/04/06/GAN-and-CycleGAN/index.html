@@ -79,17 +79,21 @@
 
 
 
-<meta name="description" content="协同过滤简单来说是利用某兴趣相投、拥有共同经验之群体的喜好来推荐用户感兴趣的信息，个人通过合作的机制给予信息相当程度的回应（如评分）并记录下来以达到过滤的目的进而帮助别人筛选信息，回应不一定局限于特别感兴趣的，特别不感兴趣信息的纪录也相当重要。">
+<meta name="description" content="GAN(生成式对抗网络)生成式对抗网络（GAN, Generative Adversarial Networks ）是一种深度学习模型，是近年来复杂分布上无监督学习最具前景的方法之一。模型通过框架中（至少）两个模块：生成模型（Generative Model）和判别模型（Discriminative Model）的互相博弈学习产生相当好的输出。原始 GAN 理论中，并不要求 G 和 D 都是神经网">
 <meta property="og:type" content="article">
-<meta property="og:title" content="协同过滤">
-<meta property="og:url" content="https://herbstlicherwind.github.io/2022/01/07/CF/index.html">
+<meta property="og:title" content="GAN and CycleGAN">
+<meta property="og:url" content="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/index.html">
 <meta property="og:site_name" content="Dreamland">
-<meta property="og:description" content="协同过滤简单来说是利用某兴趣相投、拥有共同经验之群体的喜好来推荐用户感兴趣的信息，个人通过合作的机制给予信息相当程度的回应（如评分）并记录下来以达到过滤的目的进而帮助别人筛选信息，回应不一定局限于特别感兴趣的，特别不感兴趣信息的纪录也相当重要。">
+<meta property="og:description" content="GAN(生成式对抗网络)生成式对抗网络（GAN, Generative Adversarial Networks ）是一种深度学习模型，是近年来复杂分布上无监督学习最具前景的方法之一。模型通过框架中（至少）两个模块：生成模型（Generative Model）和判别模型（Discriminative Model）的互相博弈学习产生相当好的输出。原始 GAN 理论中，并不要求 G 和 D 都是神经网">
 <meta property="og:locale">
-<meta property="article:published_time" content="2022-01-07T12:11:20.000Z">
-<meta property="article:modified_time" content="2022-02-09T18:28:20.115Z">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-b082814755a62fcf676f3d08c70d2d0d_r.jpg">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-11f8a39d629e2649146bf12794fe310c_720w.jpg">
+<meta property="article:published_time" content="2022-04-06T09:31:20.000Z">
+<meta property="article:modified_time" content="2022-04-07T13:25:22.708Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg">
 
 
 
@@ -119,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="https://herbstlicherwind.github.io/2022/01/07/CF/"/>
+  <link rel="canonical" href="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/"/>
 
 
 
 
 
-  <title>协同过滤 | Dreamland</title>
+  <title>GAN and CycleGAN | Dreamland</title>
   
 
 
@@ -292,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://herbstlicherwind.github.io/2022/01/07/CF/">
+    <link itemprop="mainEntityOfPage" href="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -309,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">协同过滤</h1>
+          <h1 class="post-title" itemprop="name headline">GAN and CycleGAN</h1>
         
 
         <div class="post-meta">
@@ -321,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-01-07T20:11:20+08:00">
-                2022-01-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-04-06T17:31:20+08:00">
+                2022-04-06
               </time>
             
 
@@ -359,88 +363,30 @@
       
 
       
-        <blockquote>
-<p>协同过滤简单来说是利用某<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/兴趣/5720174">兴趣</a>相投、拥有共同经验之群体的喜好来推荐用户感兴趣的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/信息/111163">信息</a>，个人通过合作的机制给予信息相当程度的回应（如评分）并记录下来以达到过滤的目的进而帮助别人<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/筛选/10883707">筛选</a>信息，回应不一定局限于特别感兴趣的，特别不感兴趣信息的纪录也相当重要。<br><span id="more"></span></p>
-</blockquote>
-<h2 id="相似度计算"><a href="#相似度计算" class="headerlink" title="相似度计算"></a>相似度计算</h2><p>在了解UserCF和ItemCF前，需要了解相似度计算的相关知识</p>
-<h3 id="余弦定理相似性度量"><a href="#余弦定理相似性度量" class="headerlink" title="余弦定理相似性度量"></a>余弦定理相似性度量</h3><p>例：有如下两个句子，我们来计算两者相似度</p>
-<blockquote>
-<p>Sentence A: I like oranges and bananas</p>
-<p>Sentence B: I like oranges and I don’t like apples</p>
-</blockquote>
-<p>首先将A,B两句划分为</p>
-<blockquote>
-<p>Sentence A: I/like/oranges/and/bananas</p>
-<p>Sentence B: I/like/oranges/and/I/don’t/like/apples</p>
-</blockquote>
-<p>然后列出A,B中均存在的单词</p>
-<p>I like oranges  and bananas don’t apples</p>
-<p>计算各个单词出现的频率并写出词频向量</p>
-<blockquote>
-<p>Sentence A: I 1，like 1，oranges 1，and 1，bananas 1，don’t 0，apples 0，</p>
-<p>Sentence B: I 2，like 2，oranges 1，and 1，bananas 0，don’t 1，apples 1，</p>
-<p>A:[1,1,1,1,1,0,0]</p>
-<p>B:[2,2,1,1,0,1,1]</p>
-</blockquote>
-<p>于是，我们得到了两个向量，只需计算两者相似程度便可得出A,B句子的相似度</p>
-<p>根据余弦定理</p>
-<script type="math/tex; mode=display">
-cosθ=\frac{a^2+b^2-c^2}{2ab}</script><p>若A[x1,y1],B[x2,y2]，有空间中两向量的余弦定理</p>
-<script type="math/tex; mode=display">
-cosθ=\frac{x_1x_2+y_1y_2}{\sqrt{x_1^2+y_1^2}×\sqrt{x_2^2+y_2^2}}</script><p>若A[x1,y1,z1,….n1],B[x2,y2,z2,….n2]</p>
-<script type="math/tex; mode=display">
-cosθ=\frac{\sum_{i=1}^n(A_i×B_i)}{\sqrt{\sum_{i=1}^nA_i^2}×\sqrt{\sum_{i=1}^nB_i^2}}=\frac{A·B}{|A|×|B|}</script><p>即上例中</p>
-<script type="math/tex; mode=display">
-cosθ<A,B>=\frac{1×2+1×2+1×1+1×1+1×0+0×1+0×1}{\sqrt{1^2+1^2+1^2+1^2+1^2}×\sqrt{2^2+2^2+1^2+1^2+1^2+1^2}}</script><script type="math/tex; mode=display">
-=\frac{6}{\sqrt{5}×\sqrt{12}}=0.7746</script><p>得到的cos值越趋于1，两者向量角度越接近0度，两向量越相似</p>
-<h3 id="Jaccard系数"><a href="#Jaccard系数" class="headerlink" title="Jaccard系数"></a>Jaccard系数</h3><p>Jaccard index , 又称为Jaccard相似系数（Jaccard similarity coefficient）用于比较有限样本集之间的相似性与差异性。Jaccard系数值越大，样本相似度越高。</p>
-<p>给定两集合A,B，Jaccard系数定义如下：</p>
-<script type="math/tex; mode=display">
-J(A,B)=\frac{|A∩B|}{|A∪B|}=\frac{|A∩B|}{|A|+|B|-|A∩B|}</script><p>当A,B均为空时，杰卡德系数为1</p>
-<h2 id="基于用户的协同过滤（UserCF）"><a href="#基于用户的协同过滤（UserCF）" class="headerlink" title="基于用户的协同过滤（UserCF）"></a>基于用户的协同过滤（UserCF）</h2><h3 id="算法介绍"><a href="#算法介绍" class="headerlink" title="算法介绍"></a>算法介绍</h3><p>以用户的角度，基于不同用户对物品的偏好程度，找到和目标用户偏好类似的用户集合，该用户集合可以是多个用户也可以是一个用户，通常是默认一个最相似的用户，然后将该最相似的用户所偏好且目标用户没有了解过的物品推荐给目标用户，即找到相似的用户。</p>
-<h3 id="算法过程"><a href="#算法过程" class="headerlink" title="算法过程"></a>算法过程</h3><p>例：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">用户/物品</th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">a</td>
-<td>√</td>
-<td>√</td>
-<td>√</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:left">b</td>
-<td>√</td>
-<td></td>
-<td></td>
-<td>√</td>
-</tr>
-<tr>
-<td style="text-align:left">c</td>
-<td>√</td>
-<td>√</td>
-<td></td>
-<td>√</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>”√“表示近期该用户对该物品关注</p>
-<p>利用<strong>余弦定理相似性度量</strong>求出不同用户之间的相似度，建立用户相似度矩阵：</p>
-<script type="math/tex; mode=display">
-</script><p>找到每个用户与之最相似的用户，</p>
-<h2 id="基于物品的协同过滤（ItemCF）"><a href="#基于物品的协同过滤（ItemCF）" class="headerlink" title="基于物品的协同过滤（ItemCF）"></a>基于物品的协同过滤（ItemCF）</h2><h3 id="算法介绍-1"><a href="#算法介绍-1" class="headerlink" title="算法介绍"></a>算法介绍</h3><p>以物品的角度，基于物品所受众的用户找到和目标物品受众用户类似的物品集合，将相似的物品推荐给用户，即找到相似的物品。</p>
-
+        <h1 id="GAN-生成式对抗网络"><a href="#GAN-生成式对抗网络" class="headerlink" title="GAN(生成式对抗网络)"></a>GAN(生成式对抗网络)</h1><p>生成式对抗网络（GAN, Generative Adversarial Networks ）是一种<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/深度学习/3729729">深度学习</a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/模型/1741186">模型</a>，是近年来复杂分布上<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/无监督学习/810193">无监督学习</a>最具前景的方法之一。模型通过框架中（至少）两个模块：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/生成模型/6563656">生成模型</a>（Generative Model）和<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/判别模型/16224017">判别模型</a>（Discriminative Model）的互相博弈学习产生相当好的输出。原始 GAN <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/理论/1732500">理论</a>中，并不要求 G 和 D 都是神经网络，只需要是能拟合相应生成和判别的函数即可。但实用中一般均使用深度神经网络作为 G 和 D 。一个优秀的GAN应用需要有良好的训练方法，否则可能由于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/神经网络模型/10658952">神经网络模型</a>的自由性而导致输出不理想。</p>
+<h2 id="1-相关基础概念"><a href="#1-相关基础概念" class="headerlink" title="1.相关基础概念"></a>1.相关基础概念</h2><h3 id="1-1-判别模型与生成模型"><a href="#1-1-判别模型与生成模型" class="headerlink" title="1.1 判别模型与生成模型"></a>1.1 判别模型与生成模型</h3><p><strong>判别模型</strong>是直接对条件概率P(Y|X;θ)建模，由数据直接学习决策函数Y=f(X)或者条件概率分布P(Y|X)作为预测的模型，基本思想是有限样本条件下建立判别函数，不考虑样本的产生模型，直接研究预测模型。典型的判别模型包括k近邻，感知级，决策树，支持向量机等。</p>
+<p><strong>生成模型</strong>则会对X和Y的联合分布P(X,Y)建模，由数据学习联合概率密度分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测的模型，即生成模型：P(Y|X)= P(X,Y)/ P(X)。基本思想是首先建立样本的联合概率概率密度模型P(X,Y)，然后再得到后验概率P(Y|X)，再利用它进行分类，就像上面说的那样。</p>
+<p>通俗地讲：</p>
+<p>生成模型是联合概率分布，判别模型是条件概率分布</p>
+<ul>
+<li>判别模型：给定一张图，判断这张图里的动物是猫还是狗</li>
+<li>生成模型：给一系列猫的图片，生成一张新的猫咪（不在数据集里）</li>
+</ul>
+<p>在维基百科中，有这样一个例子</p>
+<p><img src="../../themes/next/source/images/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg" alt="preview"></p>
+<p><img src="../../themes/next/source/images/v2-b082814755a62fcf676f3d08c70d2d0d_r.jpg" alt="preview"></p>
+<p><img src="../../themes/next/source/images/v2-11f8a39d629e2649146bf12794fe310c_720w.jpg" alt="img"></p>
+<h3 id="1-2-什么是对抗网络"><a href="#1-2-什么是对抗网络" class="headerlink" title="1.2 什么是对抗网络"></a>1.2 什么是对抗网络</h3><p>对抗网络是一种网络结构，判别模型用于判断一个给定的图片是不是真实的图片（从数据集里获取的图片），生成模型的任务是去创造一个看起来像真的图片一样的图片。而在开始的时候这两个模型都是没有经过训练的，这两个模型一起对抗训练，生成模型产生一张图片去欺骗判别模型，然后判别模型去判断这张图片是真是假，最终在这两个模型训练的过程中，两个模型的能力越来越强，最终达到稳态。</p>
+<p>通俗地说，就类似于警察抓造假币者，通过对抗训练使得警察识别假币的技术和造假币者造假币的技术不断提升，最终得到警察无法分辨出假币是不是假的，也就是生成器达到了最优。</p>
+<h3 id="1-3-KL散度"><a href="#1-3-KL散度" class="headerlink" title="1.3 KL散度"></a>1.3 <a target="_blank" rel="noopener" href="http://www.baidu.com/link?url=jWakXTaVOv-PsGC4XjMdybGFv1-vQcEBUqa3v8nQUsGCm0meU-l7_57aWmYe7Ra3X9VKSTLPUU4g6UlTC8U_S0GwATSEYvb1c_m_yuImEx5hdELclCWF6X3m9WkfbbtV7Q2DDswowRaQC5qCuz_LLiKFekp017RE1LgvWparRv90ZbW6VPYwSxWmYuV5WxKR">KL散度</a></h3><h2 id="2-GAN的实现过程"><a href="#2-GAN的实现过程" class="headerlink" title="2.GAN的实现过程"></a>2.GAN的实现过程</h2><h3 id="2-1-基本原理"><a href="#2-1-基本原理" class="headerlink" title="2.1 基本原理"></a>2.1 基本原理</h3><p>GAN的基本原理其实非常简单，这里以生成图片为例进行说明。假设我们有两个网络，G（Generator）和D（Discriminator）。正如它的名字所暗示的那样，它们的功能分别是：</p>
+<ul>
+<li>G是一个生成图片的网络，它接收一个随机的噪声z，通过这个噪声生成图片，记做G(z)。</li>
+<li>D是一个判别网络，判别一张图片是不是“真实的”。它的输入参数是x，x代表一张图片，输出D（x）代表x为真实图片的概率，如果为1，就代表100%是真实的图片，而输出为0，就代表不可能是真实的图片。</li>
+</ul>
+<p>在训练过程中，生成网络G的目标就是尽量生成真实的图片去欺骗判别网络D。而D的目标就是尽量把G生成的图片和真实的图片分别开来。这样，G和D构成了一个动态的“博弈过程”。</p>
+<p>最后博弈的结果是什么？在最理想的状态下，G可以生成足以“以假乱真”的图片G(z)。对于D来说，它难以判定G生成的图片究竟是不是真实的，因此D(G(z)) = 0.5。</p>
+<p>这样我们的目的就达成了：我们得到了一个生成式的模型G，它可以用来生成图片。</p>
+<h3 id="2-2-内容详解"><a href="#2-2-内容详解" class="headerlink" title="2.2 内容详解"></a>2.2 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/266677860">内容详解</a></h3><h1 id="CycleGAN"><a href="#CycleGAN" class="headerlink" title="CycleGAN"></a>CycleGAN</h1>
       
     </div>
     
@@ -464,8 +410,8 @@ J(A,B)=\frac{|A∩B|}{|A∪B|}=\frac{|A∩B|}{|A|+|B|-|A∩B|}</script><p>当A,B
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2022/01/05/juzhenfenjie/" rel="next" title="矩阵分解">
-                <i class="fa fa-chevron-left"></i> 矩阵分解
+              <a href="/2022/04/05/anno/" rel="next" title="论文学习Ⅰ">
+                <i class="fa fa-chevron-left"></i> 论文学习Ⅰ
               </a>
             
           </div>
@@ -474,8 +420,8 @@ J(A,B)=\frac{|A∩B|}{|A∪B|}=\frac{|A∩B|}{|A|+|B|-|A∩B|}</script><p>当A,B
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2022/01/10/GD/" rel="prev" title="梯度下降">
-                梯度下降 <i class="fa fa-chevron-right"></i>
+              <a href="/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/" rel="prev" title="VAE学习">
+                VAE学习 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -600,7 +546,7 @@ J(A,B)=\frac{|A∩B|}{|A∪B|}=\frac{|A∩B|}{|A|+|B|-|A∩B|}</script><p>当A,B
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="nav-number">1.</span> <span class="nav-text">相似度计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%99%E5%BC%A6%E5%AE%9A%E7%90%86%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%BA%A6%E9%87%8F"><span class="nav-number">1.1.</span> <span class="nav-text">余弦定理相似性度量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jaccard%E7%B3%BB%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">Jaccard系数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%94%A8%E6%88%B7%E7%9A%84%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%EF%BC%88UserCF%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">基于用户的协同过滤（UserCF）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">算法介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E8%BF%87%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">算法过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%89%A9%E5%93%81%E7%9A%84%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%EF%BC%88ItemCF%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">基于物品的协同过滤（ItemCF）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">3.1.</span> <span class="nav-text">算法介绍</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GAN-%E7%94%9F%E6%88%90%E5%BC%8F%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C"><span class="nav-number">1.</span> <span class="nav-text">GAN(生成式对抗网络)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%9B%B8%E5%85%B3%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">1.相关基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%88%A4%E5%88%AB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 判别模型与生成模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AF%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 什么是对抗网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-KL%E6%95%A3%E5%BA%A6"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 KL散度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-GAN%E7%9A%84%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">2.GAN的实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%86%85%E5%AE%B9%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 内容详解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CycleGAN"><span class="nav-number">2.</span> <span class="nav-text">CycleGAN</span></a></li></ol></div>
             
 
           </div>
@@ -807,26 +753,6 @@ J(A,B)=\frac{|A∩B|}{|A∪B|}=\frac{|A∩B|}{|A|+|B|-|A∩B|}</script><p>当A,B
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

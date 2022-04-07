@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning1.摘要 Abstract—Despite that deep learning has achieved state-of-the-art performance for">
+<meta name="description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)1.摘要 Abstract—Despite that deep learning has achieved stat">
 <meta property="og:type" content="article">
-<meta property="og:title" content="anno">
+<meta property="og:title" content="论文学习Ⅰ">
 <meta property="og:url" content="https://herbstlicherwind.github.io/2022/04/05/anno/index.html">
 <meta property="og:site_name" content="Dreamland">
-<meta property="og:description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning1.摘要 Abstract—Despite that deep learning has achieved state-of-the-art performance for">
+<meta property="og:description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)1.摘要 Abstract—Despite that deep learning has achieved stat">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-04-05T12:45:08.000Z">
-<meta property="article:modified_time" content="2022-04-05T12:45:43.093Z">
+<meta property="article:modified_time" content="2022-04-06T09:34:22.918Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>anno | Dreamland</title>
+  <title>论文学习Ⅰ | Dreamland</title>
   
 
 
@@ -309,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">anno</h1>
+          <h1 class="post-title" itemprop="name headline">论文学习Ⅰ</h1>
         
 
         <div class="post-meta">
@@ -359,7 +359,7 @@
       
 
       
-        <h1 id="Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning"><a href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning" class="headerlink" title="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning"></a>Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning</h1><h2 id="1-摘要"><a href="#1-摘要" class="headerlink" title="1.摘要"></a>1.摘要</h2><blockquote>
+        <h1 id="Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning-基于噪声伪标签和对抗性学习的医学图像分割注释高效学习"><a href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning-基于噪声伪标签和对抗性学习的医学图像分割注释高效学习" class="headerlink" title="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)"></a>Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)</h1><h2 id="1-摘要"><a href="#1-摘要" class="headerlink" title="1.摘要"></a>1.摘要</h2><blockquote>
 <p>Abstract—Despite that deep learning has achieved state-of-the-art performance for medical image segmentation, its success relies on a large set of manually annotated images for training that are expensive to acquire. In this paper, we propose an annotationefficient learning framework for segmentation tasks that avoids annotations of training images, where we use an improved CycleConsistent Generative Adversarial Network (GAN) to learn from a set of unpaired medical images and auxiliary masks obtained either from a shape model or public datasets. We first use the GAN to generate pseudo labels for our training images under the implicit high-level shape constraint represented by a Variational Auto-encoder (VAE)-based discriminator with the help of the auxiliary masks, and build a Discriminator-guided<br>Generator Channel Calibration (DGCC) module which employs our discriminator’s feedback to calibrate the generator for better pseudo labels. To learn from the pseudo labels that are noisy,<br>we further introduce a noise-robust iterative learning method using noise-weighted Dice loss. We validated our framework with two situations: objects with a simple shape model like optic<br>disc in fundus images and fetal head in ultrasound images, and complex structures like lung in X-Ray images and liver in CT images. Experimental results demonstrated that 1) Our VAEbased discriminator and DGCC module help to obtain highquality pseudo labels. 2) Our proposed noise-robust learning method can effectively overcome the effect of noisy pseudo labels.3) The segmentation performance of our method without using annotations of training images is close or even comparable to that of learning from human annotations.<br>Index Terms—Segmentation, Deep learning, Annotationefficient, Noisy labels</p>
 </blockquote>
 <p>尽管深度学习在医学图像分割方面取得了一流的性能，但它的成功依赖于大量手动注释的图像进行训练，这些图像的获取成本很高。 在本文中，我们提出了一种用于分割任务的注释高效学习框架，该框架避免了训练图像的注释，我们使用改进的循环一致生成对抗网络 (GAN) 从一组未配对的医学图像和从形状模型或公共数据集获得的辅助掩码中学习。 我们首先在辅助掩码的帮助下，在基于变分自动编码器 (VAE) 的鉴别器所代表的隐式高级形状约束下，使用 GAN 为我们的训练图像生成伪标签，并构建一个鉴别器引导的生成器通道 校准 (DGCC) 模块，它使用我们的鉴别器的反馈来校准生成器以获得更好的伪标签。 为了从有噪声的伪标签中学习，我们进一步介绍了一种使用噪声加权 Dice 损失的抗噪声迭代学习方法。 我们在两种情况下验证了我们的框架：具有简单形状模型的对象，例如眼底图像中的视盘和超声图像中的胎儿头部，以及复杂结构的对象，例如 X 射线图像中的肺和 CT 图像中的肝脏。 实验结果表明：1）我们的基于 VAE 的鉴别器和 DGCC 模块有助于获得高质量的伪标签。 2）我们提出的抗噪声学习方法可以有效地克服噪声伪标签的影响。 3）我们的方法在不使用训练图像注释的情况下的分割性能接近甚至可与从人类注释中学习的方法相媲美。</p>
@@ -407,6 +407,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/04/06/GAN-and-CycleGAN/" rel="prev" title="GAN and CycleGAN">
+                GAN and CycleGAN <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -483,7 +487,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -530,7 +534,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning"><span class="nav-number">1.</span> <span class="nav-text">Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%91%98%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">1.摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">2.面临的问题以及解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E4%B8%BB%E8%A6%81%E7%9F%A5%E8%AF%86"><span class="nav-number">1.3.</span> <span class="nav-text">3.涉及到的主要知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CycleGAN"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 CycleGAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%87%AA%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8VAE"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 自分自编码器VAE</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning-%E5%9F%BA%E4%BA%8E%E5%99%AA%E5%A3%B0%E4%BC%AA%E6%A0%87%E7%AD%BE%E5%92%8C%E5%AF%B9%E6%8A%97%E6%80%A7%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%B3%A8%E9%87%8A%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%91%98%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">1.摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">2.面临的问题以及解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E4%B8%BB%E8%A6%81%E7%9F%A5%E8%AF%86"><span class="nav-number">1.3.</span> <span class="nav-text">3.涉及到的主要知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CycleGAN"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 CycleGAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%87%AA%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8VAE"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 自分自编码器VAE</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
