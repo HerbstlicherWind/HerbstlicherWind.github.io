@@ -86,14 +86,14 @@
 <meta property="og:site_name" content="Dreamland">
 <meta property="og:description" content="GAN(生成式对抗网络)生成式对抗网络（GAN, Generative Adversarial Networks ）是一种深度学习模型，是近年来复杂分布上无监督学习最具前景的方法之一。模型通过框架中（至少）两个模块：生成模型（Generative Model）和判别模型（Discriminative Model）的互相博弈学习产生相当好的输出。原始 GAN 理论中，并不要求 G 和 D 都是神经网">
 <meta property="og:locale">
-<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg">
 <meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-b082814755a62fcf676f3d08c70d2d0d_r.jpg">
 <meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-11f8a39d629e2649146bf12794fe310c_720w.jpg">
 <meta property="article:published_time" content="2022-04-06T09:31:20.000Z">
-<meta property="article:modified_time" content="2022-04-07T13:25:22.708Z">
+<meta property="article:modified_time" content="2022-04-07T13:37:13.288Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://herbstlicherwind.github.io/2022/04/themes/next/source/images/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg">
+<meta name="twitter:image" content="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg">
 
 
 
@@ -373,7 +373,7 @@
 <li>生成模型：给一系列猫的图片，生成一张新的猫咪（不在数据集里）</li>
 </ul>
 <p>在维基百科中，有这样一个例子</p>
-<p><img src="../../themes/next/source/images/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg" alt="preview"></p>
+<p><img src="/2022/04/06/GAN-and-CycleGAN/v2-5eb5e035330831cd01d8fbea8d5b51e7_r.jpg" alt="preview"></p>
 <p><img src="../../themes/next/source/images/v2-b082814755a62fcf676f3d08c70d2d0d_r.jpg" alt="preview"></p>
 <p><img src="../../themes/next/source/images/v2-11f8a39d629e2649146bf12794fe310c_720w.jpg" alt="img"></p>
 <h3 id="1-2-什么是对抗网络"><a href="#1-2-什么是对抗网络" class="headerlink" title="1.2 什么是对抗网络"></a>1.2 什么是对抗网络</h3><p>对抗网络是一种网络结构，判别模型用于判断一个给定的图片是不是真实的图片（从数据集里获取的图片），生成模型的任务是去创造一个看起来像真的图片一样的图片。而在开始的时候这两个模型都是没有经过训练的，这两个模型一起对抗训练，生成模型产生一张图片去欺骗判别模型，然后判别模型去判断这张图片是真是假，最终在这两个模型训练的过程中，两个模型的能力越来越强，最终达到稳态。</p>
@@ -499,7 +499,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
