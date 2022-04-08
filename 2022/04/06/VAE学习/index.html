@@ -79,17 +79,21 @@
 
 
 
-<meta name="description" content="The story of sword takes blood as ink">
+<meta name="description" content="VAE(变分自编码器)1.基础概念1.1 AE(自编码器)自编码器（autoencoder, AE）是一类在半监督学习和非监督学习中使用的人工神经网络（Artificial Neural Networks, ANNs），其功能是通过将输入信息作为学习目标，对输入信息进行表征学习（representation learning）。 自编码器包含编码器（encoder）和解码器（decoder）两部分">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VAE学习">
+<meta property="og:title" content="VAE">
 <meta property="og:url" content="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Dreamland">
-<meta property="og:description" content="The story of sword takes blood as ink">
+<meta property="og:description" content="VAE(变分自编码器)1.基础概念1.1 AE(自编码器)自编码器（autoencoder, AE）是一类在半监督学习和非监督学习中使用的人工神经网络（Artificial Neural Networks, ANNs），其功能是通过将输入信息作为学习目标，对输入信息进行表征学习（representation learning）。 自编码器包含编码器（encoder）和解码器（decoder）两部分">
 <meta property="og:locale">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/format,f_jpg-16494069870332.jpeg">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/927a3d2569b30ef1cd9662eaa6a9d62a.svg">
+<meta property="og:image" content="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/WEBa41bfd45d74d25dda087382e9036934e">
 <meta property="article:published_time" content="2022-04-06T09:32:12.000Z">
-<meta property="article:modified_time" content="2022-04-06T09:32:12.722Z">
+<meta property="article:modified_time" content="2022-04-08T08:43:46.634Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/format,f_jpg-16494069870332.jpeg">
 
 
 
@@ -125,7 +129,7 @@
 
 
 
-  <title>VAE学习 | Dreamland</title>
+  <title>VAE | Dreamland</title>
   
 
 
@@ -309,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">VAE学习</h1>
+          <h1 class="post-title" itemprop="name headline">VAE</h1>
         
 
         <div class="post-meta">
@@ -359,7 +363,14 @@
       
 
       
-        
+        <h1 id="VAE-变分自编码器"><a href="#VAE-变分自编码器" class="headerlink" title="VAE(变分自编码器)"></a>VAE(变分自编码器)</h1><h2 id="1-基础概念"><a href="#1-基础概念" class="headerlink" title="1.基础概念"></a>1.基础概念</h2><h3 id="1-1-AE-自编码器"><a href="#1-1-AE-自编码器" class="headerlink" title="1.1 AE(自编码器)"></a>1.1 AE(自编码器)</h3><p>自编码器（autoencoder, AE）是一类在<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/半监督学习/9075473">半监督学习</a>和<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/非监督学习/16588789">非监督学习</a>中使用的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/人工神经网络/382460">人工神经网络</a>（Artificial Neural Networks, ANNs），其功能是通过将输入信息作为学习目标，对输入信息进行<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/表征学习/2140515">表征学习</a>（representation learning）。</p>
+<p>自编码器包含编码器（encoder）和解码器（decoder）两部分。按学习范式，自编码器可以被分为<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/收缩自编码器/22768373">收缩自编码器</a>（contractive autoencoder）、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/正则自编码器/22768165">正则自编码器</a>（regularized autoencoder）和变分自编码器（Variational AutoEncoder, VAE），其中前两者是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/判别模型/16224017">判别模型</a>、后者是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/生成模型/6563656">生成模型</a> （两种模型在GAN一文中有解释） 。按构筑类型，自编码器可以是前馈结构或递归结构的神经网络。</p>
+<p>自编码器具有一般意义上表征学习算法的功能，被应用于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/降维/12737059">降维</a>（dimensionality reduction）和异常值检测（anomaly detection）。包含<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/卷积层/22701737">卷积层</a>构筑的自编码器可被应用于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/计算机视觉/2803351">计算机视觉</a>问题，包括<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/图像降噪/4136566">图像降噪</a>（image denoising）、神经风格迁移（neural style transfer）等。</p>
+<h4 id="1-1-1-原理概述"><a href="#1-1-1-原理概述" class="headerlink" title="1.1.1 原理概述"></a>1.1.1 原理概述</h4><p><img src="/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/format,f_jpg-16494069870332.jpeg" alt="自编码器"></p>
+<p>自编码器的主要结构有编码器和解码器两部分，</p>
+<p><img src="/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/927a3d2569b30ef1cd9662eaa6a9d62a.svg" alt="img"></p>
+<p><img src="/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/WEBa41bfd45d74d25dda087382e9036934e" alt="img"></p>
+
       
     </div>
     
@@ -392,10 +403,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2022/04/07/post-name/" rel="prev" title="post_name">
-                post_name <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -447,8 +454,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -463,7 +479,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -500,6 +516,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VAE-%E5%8F%98%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">VAE(变分自编码器)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">1.基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-AE-%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 AE(自编码器)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.1.1 原理概述</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
