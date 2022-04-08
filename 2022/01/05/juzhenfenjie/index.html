@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="Dreamland">
 <meta property="og:description" content="矩阵分解 (decomposition, factorization)是将矩阵拆解为数个矩阵的乘积，可分为三角分解、满秩分解、QR分解、Jordan分解和SVD分解等，常见的有三种：1)三角分解法 (Triangular Factorization)，2)QR 分解法 (QR Factorization)，3)奇异值分解法 (Singular Value Decomposition)。">
 <meta property="og:locale">
-<meta property="og:image" content="https://herbstlicherwind.github.io/2022/01/05/juzhenfenjie/image-20220210022847594.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/624ffd7e239250f7c54c7b27.png">
 <meta property="article:published_time" content="2022-01-05T14:50:48.000Z">
-<meta property="article:modified_time" content="2022-02-09T18:29:05.345Z">
+<meta property="article:modified_time" content="2022-04-08T09:17:15.653Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://herbstlicherwind.github.io/2022/01/05/juzhenfenjie/image-20220210022847594.png">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/624ffd7e239250f7c54c7b27.png">
 
 
 
@@ -365,7 +365,7 @@
 <h2 id="矩阵分解-Matrix-Factorization-的基本方法"><a href="#矩阵分解-Matrix-Factorization-的基本方法" class="headerlink" title="矩阵分解(Matrix Factorization)的基本方法"></a>矩阵分解(Matrix Factorization)的基本方法</h2><ol>
 <li><p><strong>三角分解</strong></p>
 <p>三角分解法是将原正方 (square) <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/矩阵">矩阵</a>分解成一个上三角形矩阵或是排列(permuted) 的上三角形矩阵和一个 下三角形矩阵，这样的分解法又称为LU分解法。它的用途主要在简化一个大矩阵的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/行列式">行列式</a>值的计算过程，求逆矩阵，和求解联立方程组。不过要注意这种分解法所得到的上下三角形矩阵并非唯一，还可找到数个不同 的一对上下三角形矩阵，此两三角形矩阵相乘也会得到原矩阵。</p>
-<p><img src="/2022/01/05/juzhenfenjie/image-20220210022847594.png" alt="image-20220210022847594"></p>
+<p><img src="https://pic.imgdb.cn/item/624ffd7e239250f7c54c7b27.png" alt="image-20220210022847594"></p>
 </li>
 <li><p><strong>QR分解</strong></p>
 <p>QR（正交三角）分解法是求一般矩阵全部特征值的最有效并广泛应用的方法，一般矩阵先经过正交相似变化成为Hessenberg矩阵，然后再应用QR方法求特征值和特征向量。它是将矩阵分解成一个正规正交矩阵Q与上三角形矩阵R，所以称为QR分解法，与此正规正交矩阵的通用符号Q有关。</p>
