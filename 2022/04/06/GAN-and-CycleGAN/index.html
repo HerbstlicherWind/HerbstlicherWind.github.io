@@ -103,7 +103,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190327173012891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zNjQ3NDgwOQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=\begin{eqnarray*}+%26%26Minimize\+Loss_{GAN}%3D+\\+%26%26Minimize\+\mathbb{E}_{x+\sim+p_{\text+{data+}}(x)}\left[\log+\left(1-D_{Y}(G(x))\right]\right.+%2B+Minimize\+\mathbb{E}_{y+\sim+p_{\text+{data+}}(y)}\left[\log+\left(1-D_{X}(F(y))\right]\right.\\+%26%26%3DMaximize\+\mathbb{E}_{x+\sim+p_{\text+{data+}}(x)}\left[\log+D_{Y}(G(x))]\right.+%2B+Maximize\+\mathbb{E}_{y+\sim+p_{\text+{data+}}(y)}\left[\log+D_{X}(F(y))]\right.+\end{eqnarray*}">
 <meta property="article:published_time" content="2022-04-06T09:31:20.000Z">
-<meta property="article:modified_time" content="2022-04-12T07:25:42.682Z">
+<meta property="article:modified_time" content="2022-04-12T07:44:10.926Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic.imgdb.cn/item/624ffd69239250f7c54c4f58.png">
@@ -813,6 +813,26 @@ Loss=Loss_{GAN}+Loss_{cycle}</script><p>其中：</p>
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
