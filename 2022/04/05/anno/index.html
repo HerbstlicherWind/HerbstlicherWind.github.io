@@ -87,7 +87,7 @@
 <meta property="og:description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)1.摘要 Abstract—Despite that deep learning has achieved stat">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-04-05T12:45:08.000Z">
-<meta property="article:modified_time" content="2022-04-07T13:33:10.391Z">
+<meta property="article:modified_time" content="2022-04-12T07:23:46.781Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
 
@@ -369,12 +369,12 @@
 <p>这些图像的获取成本很高，因为为分割任务提供像素级注释非常耗时，并且依赖于具有领域知识的专家来实现。 获取高质量的人工注释进行训练是昂贵且劳动密集型的，这已成为开发用于医学图像分割任务的深度学习模型的主要障碍</p>
 <p><em>方案：</em></p>
 <p><strong>提出了一种用于分割任务的注释高效学习框架：避免了训练图像的注释</strong></p>
-<p>该模型从一组辅助掩码中学习，这些辅助掩码可以很容易地获得并与我们的训练图像不配对，因此不需要每个训练图像的手动注释。该框架由新颖的伪标签生成模块和迭代学习模块组成，该模块为每个训练图像获得初始伪分割标签，该迭代学习模块对初始伪标签中的噪声具有鲁棒性。</p>
+<p>该模型从一组辅助掩码中学习，这些辅助掩码可以很容易地获得并与我们的训练图像不配对，因此不需要每个训练图像的手动注释。该框架由新颖的伪标签生成模块组成，该模块为每个训练图像获得初始伪分割标签，该迭代学习模块对初始伪标签中的噪声具有鲁棒性。</p>
 <p><strong>提出了一种基于 VAE 的鉴别器：为了获得高质量的伪标签</strong></p>
 <p>该鉴别器鼓励对伪标签进行高级形状约束，并提出了鉴别器引导的生成器通道校准（DGCC）模块来校准通道信息 使用鉴别器反馈的伪标签生成器。</p>
 <p><strong>提出了一种新颖的迭代噪声鲁棒训练方法来学习伪标签：</strong></p>
 <p>其中低质量伪标签被基于标签质量的样本选择（LQSS）模块拒绝，并提出了噪声加权 Dice 损失来提升 最终分割模型的性能。</p>
-<h2 id="3-涉及到的主要知识"><a href="#3-涉及到的主要知识" class="headerlink" title="3.涉及到的主要知识"></a>3.涉及到的主要知识</h2><h3 id="3-1-CycleGAN"><a href="#3-1-CycleGAN" class="headerlink" title="3.1 CycleGAN"></a>3.1 CycleGAN</h3><h3 id="3-2-自分自编码器VAE"><a href="#3-2-自分自编码器VAE" class="headerlink" title="3.2 自分自编码器VAE"></a>3.2 自分自编码器VAE</h3><h3 id="3-3-advGAN"><a href="#3-3-advGAN" class="headerlink" title="3.3 advGAN"></a>3.3 advGAN</h3>
+<h2 id="3-涉及到的主要知识"><a href="#3-涉及到的主要知识" class="headerlink" title="3.涉及到的主要知识"></a>3.涉及到的主要知识</h2><h3 id="3-1-CycleGAN"><a href="#3-1-CycleGAN" class="headerlink" title="3.1 CycleGAN"></a>3.1 <a href="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/">CycleGAN</a></h3><h3 id="3-2-自分自编码器VAE"><a href="#3-2-自分自编码器VAE" class="headerlink" title="3.2 自分自编码器VAE"></a>3.2 <a href="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/#more">自分自编码器VAE</a></h3><h3 id="3-3-advGAN"><a href="#3-3-advGAN" class="headerlink" title="3.3 advGAN"></a>3.3 advGAN</h3>
       
     </div>
     
