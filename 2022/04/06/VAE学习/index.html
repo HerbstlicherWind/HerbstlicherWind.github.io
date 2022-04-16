@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=P%28x%29%3D%5Cint_%7Bz%7DP%28X%7Cz%29P%28z%29dz">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=KL[Q+\|+P(X|z">
 <meta property="article:published_time" content="2022-04-06T09:32:12.000Z">
-<meta property="article:modified_time" content="2022-04-12T12:52:41.029Z">
+<meta property="article:modified_time" content="2022-04-12T13:53:09.516Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic.imgdb.cn/item/6255141b239250f7c541f2c3.png">
@@ -381,7 +381,7 @@
 <p>由上，我们则需要用神经网络来拟合 $P(X|z)$ ，然后遍历全部的 $z$ 并求和得到 $P(X)$   由于 $z $ 是未知的，所以将遍历用采样来代替。但是采样就会出现一个新的问题，如果所取的 $P(X|z)$ 对结果并没有价值，那么就会引起偏差。</p>
 <p>由此我们需要建立一个新的神经网络去学习，拟合出正态分布 $Q=P(z|X)$ 的期望和方差，该分布可以辨别哪些样本更具有采样价值。当然对于这个 $Q$ 我们也要训练才能得到，直接利用<strong>$KL散度$</strong>训练即可：</p>
 <p><img src="https://www.zhihu.com/equation?tex=KL[Q+\|+P(X|z" alt="[公式]">]%3DE[logQ-logP(z|X)]\+KL[Q+|+P(X|z)]%3DE[logQ-logP(X|z)-logP(z)]%2BlogP(X)\+logP(X)-KL[Q+|+P(X|z)]%3DE[logP(X|z)]-KL[Q|+P(z)])</p>
-<p>上面的公式呢，经过几次变换，不过都是非常简单的变换，像什么贝叶斯公式，把无关项从期望中拿出来等等，为了不让说明更加复杂，大家自己推一下就好了，我就不详细说了。总之最终得到的这个公式非常有意思，我们发现正好就是我们想要优化的目标。我们的总目标就是想让这个 $P(X)$ 的概率变大，同时我们也是希望能够让我们的小武器 $Q$ 变好。结果你说巧不巧，这俩跑到一起去了，我们只要让等式右边搞大点，我们就完事了，所以右边这个东西就几乎是我们的损失函数啦！！</p>
+<p>上面的公式呢，经过几次变换，不过都是非常简单的变换，像什么贝叶斯公式，把无关项从期望中拿出来等等，为了不让说明更加复杂，大家自己推一下就好了，我就不详细说了。总之最终得到的这个公式非常有意思，我们发现正好就是我们想要优化的目标。我们的总目标就是想让这个 $P(X)$ 的概率变大，同时我们也是希望能够让我们的小武器 $Q$ 变好。结果你说巧不巧，这俩跑到一起去了，我们只要让等式右边搞大点，我们就完事了，所以右边这个东西就几乎是我们的损失函数</p>
 <h3 id="2-2-Loss"><a href="#2-2-Loss" class="headerlink" title="2.2 Loss"></a>2.2 Loss</h3><p>我们分解一下这个所谓的损失函数：</p>
 <script type="math/tex; mode=display">
 logP(X)-KL[Q||P(X|z)]=E[logP(X|z)]-KL[Q||P(z)]</script><p>第一项 $E[logP(X|z)]$ 是把 $P(X)$  转换成各种情况的条件概率求期望，最优位置是和求和是一致的，所以我们就只需要像前面说的一样，用我们的 $Q$ 采样出来一个隐变量 $z$ ，然后用神经网络生成出来一个 $X$ ，和实际的  $X$  求一下损失函数。</p>
@@ -505,7 +505,7 @@ logP(X)-KL[Q||P(X|z)]=E[logP(X|z)]-KL[Q||P(z)]</script><p>第一项 $E[logP(X|z)
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

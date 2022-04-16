@@ -86,10 +86,12 @@
 <meta property="og:site_name" content="Dreamland">
 <meta property="og:description" content="Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)1.摘要 Abstract—Despite that deep learning has achieved stat">
 <meta property="og:locale">
+<meta property="og:image" content="https://pic.imgdb.cn/item/62558119239250f7c5ecbe69.png">
 <meta property="article:published_time" content="2022-04-05T12:45:08.000Z">
-<meta property="article:modified_time" content="2022-04-12T11:56:30.675Z">
+<meta property="article:modified_time" content="2022-04-12T14:03:52.209Z">
 <meta property="article:author" content="Yinghao Wang">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/62558119239250f7c5ecbe69.png">
 
 
 
@@ -374,8 +376,17 @@
 <p>该鉴别器鼓励对伪标签进行高级形状约束，并提出了鉴别器引导的生成器通道校准（DGCC）模块来校准通道信息 使用鉴别器反馈的伪标签生成器。</p>
 <p><strong>提出了一种新颖的迭代噪声鲁棒训练方法来学习伪标签：</strong></p>
 <p>其中低质量伪标签被基于标签质量的样本选择（LQSS）模块拒绝，并提出了噪声加权 Dice 损失来提升 最终分割模型的性能。</p>
-<h2 id="3-涉及到的主要知识"><a href="#3-涉及到的主要知识" class="headerlink" title="3.涉及到的主要知识"></a>3.涉及到的主要知识</h2><h3 id="3-1-CycleGAN"><a href="#3-1-CycleGAN" class="headerlink" title="3.1 CycleGAN"></a>3.1 <a href="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/">CycleGAN</a></h3><h3 id="3-2-自分自编码器VAE"><a href="#3-2-自分自编码器VAE" class="headerlink" title="3.2 自分自编码器VAE"></a>3.2 <a href="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/#more">自分自编码器VAE</a></h3><h3 id="3-3-advGAN"><a href="#3-3-advGAN" class="headerlink" title="3.3 advGAN"></a>3.3 advGAN</h3><p><strong>KL散度的意义：</strong></p>
+<h2 id="3-涉及到的主要知识"><a href="#3-涉及到的主要知识" class="headerlink" title="3.涉及到的主要知识"></a>3.涉及到的主要知识</h2><h3 id="3-1-CycleGAN"><a href="#3-1-CycleGAN" class="headerlink" title="3.1 CycleGAN"></a>3.1 <a href="https://herbstlicherwind.github.io/2022/04/06/GAN-and-CycleGAN/">CycleGAN</a></h3><h3 id="3-2-自分自编码器VAE"><a href="#3-2-自分自编码器VAE" class="headerlink" title="3.2 自分自编码器VAE"></a>3.2 <a href="https://herbstlicherwind.github.io/2022/04/06/VAE%E5%AD%A6%E4%B9%A0/#more">自分自编码器VAE</a></h3><h3 id="3-3-advGAN"><a href="#3-3-advGAN" class="headerlink" title="3.3 advGAN"></a>3.3 advGAN</h3><p><strong>常见的一个小的数学知识点KL散度的意义：</strong></p>
 <p><strong>在统计学意义上来说，KL散度可以用来<code>衡量两个分布之间的差异程度</code>。若两者差异越小，KL散度越小，反之亦反。当两分布一致时，其KL散度为0。正是因为其可以衡量两个分布之间的差异，所以在VAE、EM、GAN中均有使用到KL散度</strong></p>
+<h2 id="4-总体思路梳理与总结"><a href="#4-总体思路梳理与总结" class="headerlink" title="4.总体思路梳理与总结"></a>4.总体思路梳理与总结</h2><p>总体上是以一个优化的CycleGAN为主体，从一组未配对的医学图像和从形状模型或公共数据集获得的辅助掩码中学习，说白了就是给没有标签的数据集无监督打标签并且优化</p>
+<p><img src="https://pic.imgdb.cn/item/62558119239250f7c5ecbe69.png" alt="image-20220412213706117"></p>
+<p>原本初始的CycleGAN所做的就是</p>
+<p>输入I给GA生成S  输入S给GB生成I</p>
+<p>判别器都用了一个advgan 用处是鼓励G生成假x和真x尽量接近</p>
+<p>在DB处多用了一个DGCC  它的作用在文中提到是用四个 DGCC 模块分别在四个尺度上校准 GA 的特征。 因为往往D的性能容易由于G</p>
+<p>作者提出了一种基于 VAE 的鉴别器 它可以提高下限 也就是说尽可能地增大采样范围 VAE是每一个输入都进行计算拟合</p>
+<p>我们把S‘和S都给这个鉴别器 作用的目标是约束GB 优化它生成更好的图像</p>
+<p>最后就是进入最后一部分，把这些已经标签好的数据放到分割模型，如果性能提升就再试试能不能继续提升 不能就抛出</p>
 
       
     </div>
@@ -489,7 +500,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -536,7 +547,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning-%E5%9F%BA%E4%BA%8E%E5%99%AA%E5%A3%B0%E4%BC%AA%E6%A0%87%E7%AD%BE%E5%92%8C%E5%AF%B9%E6%8A%97%E6%80%A7%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%B3%A8%E9%87%8A%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%91%98%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">1.摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">2.面临的问题以及解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E4%B8%BB%E8%A6%81%E7%9F%A5%E8%AF%86"><span class="nav-number">1.3.</span> <span class="nav-text">3.涉及到的主要知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CycleGAN"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 CycleGAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%87%AA%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8VAE"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 自分自编码器VAE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-advGAN"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 advGAN</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Annotation-Efficient-Learning-for-Medical-Image-Segmentation-based-on-Noisy-Pseudo-Labels-and-Adversarial-Learning-%E5%9F%BA%E4%BA%8E%E5%99%AA%E5%A3%B0%E4%BC%AA%E6%A0%87%E7%AD%BE%E5%92%8C%E5%AF%B9%E6%8A%97%E6%80%A7%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%B3%A8%E9%87%8A%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">Annotation-Efficient Learning for Medical Image Segmentation based on Noisy Pseudo Labels and Adversarial Learning(基于噪声伪标签和对抗性学习的医学图像分割注释高效学习)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%91%98%E8%A6%81"><span class="nav-number">1.1.</span> <span class="nav-text">1.摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">2.面临的问题以及解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E4%B8%BB%E8%A6%81%E7%9F%A5%E8%AF%86"><span class="nav-number">1.3.</span> <span class="nav-text">3.涉及到的主要知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CycleGAN"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 CycleGAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%87%AA%E5%88%86%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8VAE"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 自分自编码器VAE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-advGAN"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 advGAN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86%E4%B8%8E%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text">4.总体思路梳理与总结</span></a></li></ol></li></ol></div>
             
 
           </div>

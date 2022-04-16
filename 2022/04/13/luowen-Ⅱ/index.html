@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Adversarial Continual Learning for Multi-Domain Hippocampal SegmentationAbstract Deep learning for medical imaging suﬀers from temporal and privacy-related restrictions on data availability. To still">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文学习Ⅱ">
+<meta property="og:url" content="https://herbstlicherwind.github.io/2022/04/13/luowen-%E2%85%A1/index.html">
+<meta property="og:site_name" content="Dreamland">
+<meta property="og:description" content="Adversarial Continual Learning for Multi-Domain Hippocampal SegmentationAbstract Deep learning for medical imaging suﬀers from temporal and privacy-related restrictions on data availability. To still">
+<meta property="og:locale">
+<meta property="og:image" content="https://pic.imgdb.cn/item/625a6bc6239250f7c593d30b.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/625a6bc3239250f7c593cd08.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/625a6bc6239250f7c593d30b.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/625a6bc3239250f7c593cd08.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/625966f5239250f7c5174bc9.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/62597098239250f7c52c04c2.png">
+<meta property="article:published_time" content="2022-04-13T11:28:07.000Z">
+<meta property="article:modified_time" content="2022-04-16T07:10:42.983Z">
+<meta property="article:author" content="Yinghao Wang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/625a6bc6239250f7c593d30b.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://herbstlicherwind.github.io/2022/04/13/luowen-Ⅱ/"/>
+
+
+
+
+
+  <title>论文学习Ⅱ | Dreamland</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dreamland</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://herbstlicherwind.github.io/2022/04/13/luowen-%E2%85%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dreamland">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文学习Ⅱ</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-04-13T19:28:07+08:00">
+                2022-04-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Adversarial-Continual-Learning-for-Multi-Domain-Hippocampal-Segmentation"><a href="#Adversarial-Continual-Learning-for-Multi-Domain-Hippocampal-Segmentation" class="headerlink" title="Adversarial Continual Learning for Multi-Domain Hippocampal Segmentation"></a>Adversarial Continual Learning for Multi-Domain Hippocampal Segmentation</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><blockquote>
+<p>Deep learning for medical imaging suﬀers from temporal and privacy-related restrictions on data availability. To still obtain viable models, continual learning aims to train in sequential order, as and when<br>data is available. The main challenge that continual learning methods face is to prevent catastrophic forgetting, i.e., a decrease in performance on the data encountered earlier. This issue makes continuous training of segmentation models for medical applications extremely diﬃcult. Yet, often, data from at least two diﬀerent domains is available which we can exploit to train the model in a way that it disregards domain-speciﬁc information. We propose an architecture that leverages the simultaneous availability of two or more datasets to learn a disentanglement between the content and domain in an adversarial fashion. The domain-invariant content representation then lays the base for continual semantic segmen- tation. Our approach takes inspiration from domain adaptation and combines it with continual learning for hippocampal segmentation in brain MRI. We showcase that our method reduces catastrophic forgetting and outperforms state-of-the-art continual learning methods.</p>
+</blockquote>
+<p>医学成像的深度学习受到数据可用性的时间和隐私相关限制。为了仍然获得可行的模型，持续学习旨在在数据可用时按顺序进行训练。持续学习方法面临的主要挑战是防止灾难性遗忘，即早期遇到的数据性能下降。这个问题使得针对医疗应用的分割模型的持续训练变得极其困难。然而，通常，来自至少两个不同领域的数据是可用的，我们可以利用这些数据以忽略特定领域信息的方式训练模型。我们提出了一种架构，该架构利用两个或多个数据集的同时可用性，以对抗的方式学习内容和域之间的解耦。然后，域不变的内容表示为持续语义分割奠定了基础。我们的方法从领域适应中汲取灵感，并将其与脑 MRI 中海马分割的持续学习相结合。我们展示了我们的方法减少了灾难性的遗忘，并且优于最先进的持续学习方法。</p>
+<h3 id="Keywords"><a href="#Keywords" class="headerlink" title="Keywords"></a>Keywords</h3><p>持续学习 · 对抗训练 · 特征解开 · 海马 MRI 分割</p>
+<h2 id="Problems-to-be-solved"><a href="#Problems-to-be-solved" class="headerlink" title="Problems to be solved"></a>Problems to be solved</h2><p><strong>持续学习方法面临的主要挑战是防止灾难性遗忘</strong></p>
+<p><strong>即早期遇到的数据性能下降模型过于强烈地适应最后一批训练的特殊性</strong>：</p>
+<p><strong>深度学习领域一直以来都存在着“灾难性遗忘”(Catastrophic  Forgetting)的难题，它指的是利用神经网络当学习一个新任务的时候，需要更新网络中的参数，但是上一个任务提取出来的知识也是储存在这些参数上的，于是每当学习新的任务就会把学习旧任务得到的知识给遗忘掉，做不到像人类那样在学习中可以利用先前学习过的经验和知识，快速地进行相似技能的学习。</strong></p>
+<p>这个问题使得针对医疗应用的分割模型的持续训练变得极其困难。</p>
+<blockquote>
+<p>The leading cause of catastrophic forgetting in medical imaging is multi-domain data originating from diﬀerent domains [25]. These domains result from diverse disease patterns among the examined subjects and divergent technologies and standards used during the acquisition process. In magnetic resonance imaging (MRI) it is common practice for institutions to operate scanners from various vendors and employ disparate protocols [21]. Additionally, MRI datasets frequently contain subjects that are either healthy or suﬀer from various pathological conditions. To suﬃciently solve a task with data from multiple domains,models have to adapt and learn in a domain-invariant fashion.</p>
+</blockquote>
+<p>医学成像中灾难性遗忘的主要原因是源自不同领域的多领域数据 [25]。这些领域是由被检查对象之间不同的疾病模式以及获取过程中使用的不同技术和标准引起的。在磁共振成像 (MRI) 中，机构通常操作来自各种供应商的扫描仪并采用不同的协议 [21]。此外，MRI数据集经常包含健康或来自各种病理状况的受试者。为了使用来自多个域的数据来有效地解决任务，模型必须以域不变的方式进行适应和学习</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p><strong>提出了一种架构</strong>，该架构<strong>利用两个或多个数据集的同时可用性</strong>，以<strong>对抗的方式学习内容和域之间的解耦</strong>。然后，域不变的内容表示<strong>为持续语义分割奠定基础</strong>。我们的方法从<strong>领域适应</strong>中汲取灵感，并将其与<strong>脑 MRI 中海马分割的持续学习</strong>相结合。展示了我们的方法减少了灾难性的遗忘，并且优于最先进的持续学习方法。</p>
+<h3 id="大致思路"><a href="#大致思路" class="headerlink" title="大致思路"></a>大致思路</h3><p>主要面临的问题就是，深度学习中灾难性遗忘，主要原因是源自不同领域的多领域数据，作者提出了一种架构叫做对抗性连续分段器（ACS）来解决问题<img src="https://pic.imgdb.cn/item/625a6bc6239250f7c593d30b.png" alt="image-20220415203725964"></p>
+<p>对输入的图片进行两部分处理，一部分编码域，一部分编码内容</p>
+<h4 id="编码内容：主要利用了U-Net"><a href="#编码内容：主要利用了U-Net" class="headerlink" title="编码内容：主要利用了U-Net"></a>编码内容：主要利用了U-Net</h4><p><strong>为了防止关于域的信息仍然可以通过 U-Net 的跳跃连接从 Ec 流向 S</strong>引入了内容鉴别器 Dc。 Dc 正则化 zc 以及跳过连接，这样可以让Ec 尽量不会将任何域信息泄漏到分段器 S。鉴别器的设计类似于反向 U-Net 解码器，它在每个相应的层以 zc 作为输入和跳过连接 Ec 。 分别使用多类交叉熵损失 Lc advDc 和 Lc advEc 训练 Dc 和 Ec。</p>
+<h4 id="编码域：首先将域编码器建模为变分自动编码器，将域编码为-由方差-σ2-和均值-μ-参数化的分布-zd，"><a href="#编码域：首先将域编码器建模为变分自动编码器，将域编码为-由方差-σ2-和均值-μ-参数化的分布-zd，" class="headerlink" title="编码域：首先将域编码器建模为变分自动编码器，将域编码为 由方差 σ2 和均值 μ 参数化的分布 zd，"></a>编码域：首先将域编码器建模为变分自动编码器，将域编码为 由方差 σ2 和均值 μ 参数化的分布 zd，</h4><p><strong>为了为生成器输入准备域信息</strong>，从学习的域分布中采样，然后将样本传递到 Alharbi 等人提出的<strong>潜在尺度层 LS</strong>然后产生一个潜在的域尺度 <strong>fds。</strong> </p>
+<p><strong>为了给 G 关于域的额外信息</strong>，使用中心偏置实例归一化注入域代码，用一个单热向量对这个域代码进行建模。<strong>?？》？</strong></p>
+<p>然后zc 和缩放域样本 fds 都被输入生成器 G 以重建输入样本 xi。</p>
+<p><strong>为了现在解开内容和领域，</strong>引入了对抗性训练。于是部署了一个域判别器 Dd和G对抗训练</p>
+<p>还定义了一个潜在代码回归损失 Llr，它限制生成器为潜在代码 z 生成唯一的映射。 图中似乎没有体现</p>
+<p><img src="https://pic.imgdb.cn/item/625a6bc3239250f7c593cd08.png" alt="image-20220415215844658" style="zoom:50%;"></p>
+<p>最后 利用ACS可以通过训练（黑色）或冻结（灰色）网络部件对不同的数据集可用性做出反应.</p>
+<p>a） 在第1阶段，对来自不同领域的两个数据集进行解纠缠训练。在第2阶段，新的数据集可用，而之前的数据集不可用。ACS现在在新的基础上进行了微调。第三阶段引入第四个数据集时，将重复微调。</p>
+<p>b） 如果前两个数据集在第三个数据集可访问时仍然可用，则可以在第二阶段使用三个数据集重复解纠缠。</p>
+<h2 id="主要的知识点"><a href="#主要的知识点" class="headerlink" title="主要的知识点"></a>主要的知识点</h2><p>对抗性连续分段器（ACS）</p>
+<p>MRI 数据集</p>
+<p>对抗性训练：利用GAN</p>
+<p>域表示之间的解耦</p>
+<p>潜在空间正则化为多域数据的连续语义分割</p>
+<p>多域海马分割</p>
+<p>U-Net：U-Net网络能从极少的训练图像中，依靠数据增强将有效的标注数据更为有效地使用。</p>
+<p>VAE</p>
+<h4 id><a href="#" class="headerlink" title=" "></a> </h4><p><img src="https://pic.imgdb.cn/item/625a6bc6239250f7c593d30b.png" alt="image-20220415203725964"></p>
+<p>图2: ACS架构的详细可视化。我们通过两个编码器 (用于内容的Ec和用于域的Ed) 实现功能解纠缠。内容和域鉴别器Dc和Dd将潜在表示zc正则化，在Dc的情况下，还将U-Net的跳过连接调整为域不变。分段是通过U网的正向传递来完成的。</p>
+<p><img src="https://pic.imgdb.cn/item/625a6bc3239250f7c593cd08.png" alt="image-20220415215731352" style="zoom:50%;"></p>
+<h2 id="LOSS"><a href="#LOSS" class="headerlink" title="LOSS"></a>LOSS</h2><p>首先描述了我们如何将输入图像分解为内容和域表示，然后通过引入对抗性方法进行跟进。 我们的域表示对采集方式的异质性进行建模，例如，不同的协议和机器供应商，以及不同的疾病模式。 为了学习领域不变的内容表示，我们最初同时在两个数据集上进行训练，这在 I2I 翻译中很常见。 然后，这种表示作为我们的 U-Net 分割器的基础。 </p>
+<p><strong>变分自动编码器损失</strong>：我们将域编码器建模为变分自动编码器（VAE）[16]，它将域编码为由方差 σ2 和均值 μ 参数化的分布 zd。 因为域的复杂度被假定低于内容复杂度，我们将域表示的维度限制为一个浮点值。 我们使用输入图像 xi 和生成器输出 xi 之间的重建损失和由超参数 η 加权的 Kullback-Leibler 正则化项的组合来绘制接近 N(0, 1) 的正态分布高斯先验的编码。</p>
+<p><img src="https://pic.imgdb.cn/item/625966f5239250f7c5174bc9.png" alt="image-20220415203423831" style="zoom: 67%;"></p>
+<p><strong>潜在回归 loss</strong>：为了为生成器输入准备域信息，我们首先从学习的域分布中采样，然后将样本传递到 Alharbi 等人提出的潜在尺度层 LS。 [1] 产生一个潜在的域尺度 fds。 为了给 G 关于域的额外信息，我们使用中心偏置实例归一化注入域代码 d [12,29]。 我们用一个单热向量对这个域代码进行建模。 正如姜和 Veeraraghavan [12] 提出并基于 Lee 等人提出的。 [19]和黄等人。 [11]，我们还定义了一个潜在代码回归损失 Llr，它限制生成器为潜在代码 z 生成唯一的映射。 </p>
+<p><strong>GAN 损失</strong>：我们将 U-Net 的编码器解释为内容编码器 Ec，底层的输出被视为内容表示 zc。 zc 和缩放域样本 fds 都被输入生成器 G 以重建输入样本 xi。 为了现在解开内容和领域，我们引入了对抗性训练。 我们部署了一个域判别器 Dd，它通过判别输入图像 xi 是否是给定域 d 的一部分来正则化 Ec、Ed 和 G。 Dd 训练真实图像和生成图像的组合，如方程式中相应的鉴别器损失中所述。 2. G 从 xi 的内容 zc 和随机域 z 生成这些图像。 G、Ec 和 Ed 通过最小化等式所示的负二元交叉熵损失来对抗鉴别器。 3. 训练迫使 Ec 产生域不变的输出，我们将其用于分割任务。</p>
+<p><img src="https://pic.imgdb.cn/item/62597098239250f7c52c04c2.png" alt="image-20220415203433765" style="zoom:67%;"></p>
+<p><strong>内容对抗性损失</strong>：关于域的信息仍然可以通过 U-Net 的跳跃连接从 Ec 流向 S。 为了防止这种情况，我们引入了受江等人启发的内容鉴别器 Dc。 和 Kamnitsas 等人。 [12,13]。 Dc 正则化 zc 以及跳过连接，因为我们希望 Ec 不会将任何域信息泄漏到分段器 S。鉴别器设计类似于反向 U-Net 解码器，即它以 zc 作为输入和跳过连接 Ec 在每个相应的层。 我们分别使用多类交叉熵损失 Lc advDc 和 Lc advEc 训练 Dc 和 Ec。 对于生成的图像，我们将域代码表示为占位符类。 为了确保对抗训练是稳定的，我们在不同的步骤[12]训练鉴别器和剩余的架构。分割：为了产生分割掩码 ˆyi，我们通过 Ec 将输入 xi 编码到 zc 中。 然后我们将 zc 和 Ec 的跳跃连接传递给 S 来计算 ^yi。 我们通过 Dice 和目标掩码 yi 和预测 yi 之间的二进制交叉熵损失的逐像素组合来训练 U-Net 进行语义分割。 在最初在两个或更多数据集上训练架构后，模型已经充分了解了内容和领域之间的解耦。 为了在新数据集上训练，我们只微调 S 的最后四个卷积层。</p>
+<h2 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h2><p>我们提出了ACS，一种利用数据集的同时可用性对多域数据进行连续语义分割的体系结构。在实际的临床实践中，在持续培训过程开始时，可以通过公共或可访问的历史数据等来源获得多个数据集。与当前的方法不同，我们利用这种偶然性，通过对抗性训练将MRI图像分解为内容和域表示。然后，我们直接在域不变内容表示上执行多域海马分割。我们通过在第一个训练阶段对多域数据进行域分解，展示了显著的改进。在第二个培训阶段，通过展示使用所有可用数据减少灾难性遗忘，并优于当前最先进的方法，我们提出的持续学习方案的好处变得更加明显。我们的方法将持续学习推向临床应用，在临床应用中存在不同程度的可变性，如疾病模式、扫描供应商和采集协议，并进一步支持在临床实践中持续使用深度学习模型。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/04/12/advGAN/" rel="next" title="AdvGAN">
+                <i class="fa fa-chevron-left"></i> AdvGAN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="2822328563@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Adversarial-Continual-Learning-for-Multi-Domain-Hippocampal-Segmentation"><span class="nav-number">1.</span> <span class="nav-text">Adversarial Continual Learning for Multi-Domain Hippocampal Segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.1.</span> <span class="nav-text">Abstract</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Keywords"><span class="nav-number">1.1.1.</span> <span class="nav-text">Keywords</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problems-to-be-solved"><span class="nav-number">1.2.</span> <span class="nav-text">Problems to be solved</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">1.3.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%87%B4%E6%80%9D%E8%B7%AF"><span class="nav-number">1.3.1.</span> <span class="nav-text">大致思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%86%85%E5%AE%B9%EF%BC%9A%E4%B8%BB%E8%A6%81%E5%88%A9%E7%94%A8%E4%BA%86U-Net"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">编码内容：主要利用了U-Net</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%9F%9F%EF%BC%9A%E9%A6%96%E5%85%88%E5%B0%86%E5%9F%9F%E7%BC%96%E7%A0%81%E5%99%A8%E5%BB%BA%E6%A8%A1%E4%B8%BA%E5%8F%98%E5%88%86%E8%87%AA%E5%8A%A8%E7%BC%96%E7%A0%81%E5%99%A8%EF%BC%8C%E5%B0%86%E5%9F%9F%E7%BC%96%E7%A0%81%E4%B8%BA-%E7%94%B1%E6%96%B9%E5%B7%AE-%CF%832-%E5%92%8C%E5%9D%87%E5%80%BC-%CE%BC-%E5%8F%82%E6%95%B0%E5%8C%96%E7%9A%84%E5%88%86%E5%B8%83-zd%EF%BC%8C"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">编码域：首先将域编码器建模为变分自动编码器，将域编码为 由方差 σ2 和均值 μ 参数化的分布 zd，</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">主要的知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.4.0.1.</span> <span class="nav-text"> </span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LOSS"><span class="nav-number">1.5.</span> <span class="nav-text">LOSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusion"><span class="nav-number">1.6.</span> <span class="nav-text">conclusion</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yinghao Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
