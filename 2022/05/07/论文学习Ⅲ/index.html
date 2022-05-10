@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基于语义级别对抗学习的领域自适应分割方法1.基于边缘分布对齐的对抗网络为了让神经网络在两个不同的领域中生成相似的分割结果，常用的思路是的对抗性学习，和生成对抗网络类似，该模型由两部分组成：可以对图像像素进行分类的分割模型 G和用来区分输入来自源域分割输出还是目标域分割输出的判别器 D。一方面，通过监督学习，分割模型 G 不仅要对源域中存在标注的图像进行精确分割，还要以欺骗判别器为目标，在目标域上生">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文学习Ⅲ">
+<meta property="og:url" content="https://herbstlicherwind.github.io/2022/05/07/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E2%85%A2/index.html">
+<meta property="og:site_name" content="清辉夜凝">
+<meta property="og:description" content="基于语义级别对抗学习的领域自适应分割方法1.基于边缘分布对齐的对抗网络为了让神经网络在两个不同的领域中生成相似的分割结果，常用的思路是的对抗性学习，和生成对抗网络类似，该模型由两部分组成：可以对图像像素进行分类的分割模型 G和用来区分输入来自源域分割输出还是目标域分割输出的判别器 D。一方面，通过监督学习，分割模型 G 不仅要对源域中存在标注的图像进行精确分割，还要以欺骗判别器为目标，在目标域上生">
+<meta property="og:locale">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6262575e239250f7c56b7108.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269d5239250f7c59c5e35.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269d8239250f7c59c67a0.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269dc239250f7c59c704f.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269de239250f7c59c7700.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269e0239250f7c59c7c3b.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269e3239250f7c59c8279.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269e4239250f7c59c85cb.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/626269e5239250f7c59c895a.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/62626ced239250f7c5a46619.png">
+<meta property="article:published_time" content="2022-05-07T10:47:54.000Z">
+<meta property="article:modified_time" content="2022-05-10T11:54:34.073Z">
+<meta property="article:author" content="Yinghao Wang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/6262575e239250f7c56b7108.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://herbstlicherwind.github.io/2022/05/07/论文学习Ⅲ/"/>
+
+
+
+
+
+  <title>论文学习Ⅲ | 清辉夜凝</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">清辉夜凝</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://herbstlicherwind.github.io/2022/05/07/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E2%85%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="清辉夜凝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文学习Ⅲ</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-05-07T18:47:54+08:00">
+                2022-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="基于语义级别对抗学习的领域自适应分割方法"><a href="#基于语义级别对抗学习的领域自适应分割方法" class="headerlink" title="基于语义级别对抗学习的领域自适应分割方法"></a>基于语义级别对抗学习的领域自适应分割方法</h1><h2 id="1-基于边缘分布对齐的对抗网络"><a href="#1-基于边缘分布对齐的对抗网络" class="headerlink" title="1.基于边缘分布对齐的对抗网络"></a>1.基于边缘分布对齐的对抗网络</h2><p>为了让神经网络在两个不同的领域中生成相似的分割结果，常用的思路是的对抗性学习，和生成对抗网络类似，该模型由两部分组成：可以对图像像素进行分类的分割模型 G和用来区分输入来自源域分割输出还是目标域分割输出的判别器 D。一方面，通过监督学习，分割模型 G 不仅要对源域中存在标注的图像进行精确分割，还要以欺骗判别器为目标，在目标域上生成较好的分割结果。而判别器的训练目标则是努力区分分割结果的来源。通过两个对抗网络之间的极小极大博弈，分割模型 G 最终能获得较好的域间泛化能力。基于对抗学习的思路，很多领域自适应的方法已经取得了令人印象深刻的成果。</p>
+<p><img src="https://pic.imgdb.cn/item/6262575e239250f7c56b7108.png" alt="image-20220422152145312" style="zoom:50%;"></p>
+<h3 id="1-1-负迁移现象"><a href="#1-1-负迁移现象" class="headerlink" title="1.1 负迁移现象"></a>1.1 负迁移现象</h3><p>传统对抗学习的方法有效地提升了模型泛化能力，但这一类方法存在一个先天的不足：当训练收敛，生成网络能够很好地欺骗判别网络时，<strong>它只是对两个领域的边缘分布（Marginal Distribution）进行了对齐</strong>（即$ P(F_s) $≈ $P (F_t)$, 其中 $F_s$和 $F_t$分别表示源域和目标域中的数据），<strong>而忽略了两个领域中相对应的语义类别之间的联合概率分布对齐</strong>（即$ P(F_s, Y_s) ≠ P (F_t, Y_t)$, 其中 $Y_s$和 $Y_t$表示像素的类别）</p>
+<p>因此，<strong>传统对抗学习方法在实际训练过程中可能会导致那些已经与源域中的语义对齐很好的目标域像素被映射到一个不正确的语义类别</strong>。特别是当使用较大的对抗损失权重训练网络时，这种副作用会变得更为严重，==<strong>称之为 “负迁移” 现象。</strong>==</p>
+<p>灰色箭头的大小表示对抗性损失的权重，传统的对抗性学习在追求边际分布对齐时忽略了语义一致性，全局移动导致良好对齐的特征（类别 A）映射到错误的语义上，造成负迁移。负迁移现象是导致模型在目标域性能下降的一个关键原因。</p>
+<p><img src="https://pic.imgdb.cn/item/626269d5239250f7c59c5e35.png" alt="image-20220422153453496"></p>
+<h2 id="2-基于语义级别对齐的对抗网络"><a href="#2-基于语义级别对齐的对抗网络" class="headerlink" title="2.基于语义级别对齐的对抗网络"></a>2.基于语义级别对齐的对抗网络</h2><p>为了解决基于边缘分布对齐的对抗学习网络的不足，提出了一个在输出空间上的语义别级对抗网络（Category-Level Adversarial Network），该网络优先考虑像素间语义类别的对齐，而通过局部语义对齐引导完成最终的全局分布对齐。</p>
+<p><strong>CLAN 的核心思想分为两个方面：</strong></p>
+<p>算法确定那些已经在源域和目标域之间已经语义对齐的像素，并保护这种类别对齐不受对抗学习的副作用影响。</p>
+<p>算法找到在两个域之间分布不同的类，这些类需要利用对抗学习来完成对齐，因此需要在训练中增加了对抗损失的权重。在这个过程中，算法利用协同训练的思想计算语义对齐的得分，它可以使用两个互斥的分类器进行高置信度的预测，从而预测每个类在源域和目标域之间的对齐程度。</p>
+<p>此外，此方法在不破坏传统方法在常见类上的提升效果的情况下，更着重于解决罕见类别，如街景数据集中像素占比较小的交通灯、指示牌、自行车等，在负迁移现象发生时从分割错误的问题。</p>
+<h3 id="2-1-协同训练"><a href="#2-1-协同训练" class="headerlink" title="2.1 协同训练"></a>2.1 协同训练</h3><p>协同训练是指学习者在两种相互冗余的视角上完成训练，通过视角之间的协同作用对未标注的数据预测高置信度的标签。<strong>“充分冗余” 是指两个视角的判断依据需完全不同 </strong> <strong>“视角”这一概念通过基于卷积神经网络的分类器来实现</strong></p>
+<p>基于协同训练的方法使用两个分类器作为不同的视角对特征进行分类：</p>
+<p>当两个视角给出的预测一致时，则可认为此预测是准确的，可信度高的；</p>
+<p>而当两个视角的预测不一致时，可认为该预测不准确，可信程度低。</p>
+<p>其中，高置信度的预测结果可以作为<strong>伪标签</strong>使用，进一步使网络能够通过有监督学习的方式，直接从目标领域获得知识。</p>
+<h3 id="2-2-CLAN结构"><a href="#2-2-CLAN结构" class="headerlink" title="2.2 CLAN结构"></a>2.2 CLAN结构</h3><p><img src="https://pic.imgdb.cn/item/626269d8239250f7c59c67a0.png" alt="image-20220422160613635" style="zoom:67%;"></p>
+<p>CLAN 的网络架构如图 3.5所示。它由生成器 $G $ 和判别器 $D$ 组成。$G $ 可以是任何基于 FCN 的分割网络，$D $是一个基于 CNN 的二进制分类器，具有全卷积输出。根据标准的协同训练算法，将生成器 $G$ 分为特征提取器 E 和两个分类器$C_1$和$ C_2$。$E $从输入图像中提取特征，$C_1$ 和 $ C_2$ 将 $ E$ 提取的特征分类为预定义的语义类之一，如车辆、树木和道路。根据协同训练的要求，通过余弦距离损失引导 $C_1$ 和 $C_2$ 的权重向量正交。这将为网络提供不同的视角来对每个特性进行语义预测。最终的预测图 $p $由两种不同的预测张量 $p^{(1)}$和 $p^{(2)}$相加得到的，这里称 $p$ 为综合预测。给定$X_s$中的源域图像 $x_s$，特征提取器 $E $输出一个特征向量，它紧接着被输入到分类器$ C1$和 $C2$中，以生成像素级的综合预测 $p$。一方面，$p $用于计算在$ Y_s$中的真实标签 $y_s$的监督下的多分类交叉熵损失。另一方面，$p$ 被输入到 $D$ 中，以产生对抗损失。给定 $X_t$中的目标域图像 $x_t$，类似于源域流，算法将它输入到 $G$并输出一个综合预测 $p$。与源数据流不同的是，算法还从 $p^{(1)}$和$p^{(2)}$中生成一个预测差异图，表示为$ M(p^{(1)}p^{(2)})$，其中 $M(·   ·) $表示某个适当的距离度量，用于度量$p^{(1)}$和$p^{(2)}$之间的像素级差异。</p>
+<p>目标域样本的最终自适应对抗损失形式为 </p>
+<p><img src="https://pic.imgdb.cn/item/626269dc239250f7c59c704f.png" alt="image-20220422163305779"></p>
+<p>其中 i, j 遍历分割图上的所有像素。这样，分割图上的每个像素都有不同的加权值的对抗性损失。</p>
+<h3 id="2-3-Loss"><a href="#2-3-Loss" class="headerlink" title="2.3 Loss"></a>2.3 Loss</h3><p>共有三项损失函数，即<strong>分割损失</strong>、<strong>权重差异损失</strong>和<strong>自适应对抗损失</strong>。</p>
+<p><img src="https://pic.imgdb.cn/item/626269de239250f7c59c7700.png" alt="image-20220422163219736"></p>
+<p>给定一个源域的图像 $x ∈ XS$，图像大小为$ 3 × H × W$；以及一张对应的真实标签 $y ∈ YS$，标签大小为$ C × H timesW$，其中$ C $是类别的数目。</p>
+<h4 id="分割损失"><a href="#分割损失" class="headerlink" title="分割损失"></a>分割损失</h4><p>即多类交叉熵损失：</p>
+<p><img src="https://pic.imgdb.cn/item/626269e0239250f7c59c7c3b.png" alt="image-20220422162320579"></p>
+<p>其中 $pic$表示在第$ i $个像素上对类别 $c$ 的预测概率，$y_ic$表示数据集中像素 $i$ 的真实类别：如果第 $i$ 个像素属于类别$ c$, 那么 $y_ic$= 1，反之 $y_ic$= 0。</p>
+<h4 id="权重差异损失"><a href="#权重差异损失" class="headerlink" title="权重差异损失"></a>权重差异损失</h4><p>依据标准的协同训练算法准则，C1和 C2这两个分类器应该尽可能冗余甚至正交，<strong>即具有完全不同的参数，以便对一个特征向量提供两个不同的视角进行分类</strong>。否则，协同训练就会退化为一般的有监督训练。</p>
+<p>算法通过<strong>最小化两个分类器参数向量的余弦相似度</strong>来增强它们的卷积层的权值的差别。</p>
+<p>损失函数可以表示为：</p>
+<p><img src="https://pic.imgdb.cn/item/626269e3239250f7c59c8279.png" alt="image-20220422162803734"></p>
+<p>其中 w1和 w2分别表示分类器 C1和 C2的参数。</p>
+<h4 id><a href="#" class="headerlink" title=" "></a> </h4><h4 id="自适应对抗损失"><a href="#自适应对抗损失" class="headerlink" title="自适应对抗损失"></a><strong>自适应对抗损失</strong></h4><p>由传统的对抗性损失拓展而来，采用 $p^{(1)}$和$p^{(2)}$两种预测之间的差异作为衡量对抗性损失的指标。</p>
+<p><img src="https://pic.imgdb.cn/item/626269e4239250f7c59c85cb.png" alt="image-20220422163022089"></p>
+<p>其中 p(1)和 p(2)分别表示由分类器 C1和 C2作出的预测，M(· ·) 表示余弦距离，超参数 $λ_{local}$ 控制对抗性损失的自适应权值。为了稳定对抗训练过程，算法在自适应权值中加入了一个小数值 ϵ</p>
+<p>综上所述，CLAN的训练目标为：</p>
+<p><img src="https://pic.imgdb.cn/item/626269e5239250f7c59c895a.png" alt="image-20220422163532337"></p>
+<p>和传统的对抗学习的训练方式相同，算法交替训练 G 和 D 直至损失收敛。</p>
+<h3 id="2-4-方法分析"><a href="#2-4-方法分析" class="headerlink" title="2.4 方法分析"></a>2.4 方法分析</h3><p>CLAN与传统的对抗性学习的主要区别在于<strong>分类器的权重差异损失</strong>和<strong>语义级对抗损失</strong>。</p>
+<h4 id="分类器的权重差异损失"><a href="#分类器的权重差异损失" class="headerlink" title="分类器的权重差异损失"></a>分类器的权重差异损失</h4><p>一方面，分类器的<strong>权重差异损失（协同训练）</strong>鼓励特征提取模块 E <strong>学习领域间的不变特征</strong> ，而不是学习域特定特征，如光照变化等。 <strong>学习不变特征就是指学习联合分布。</strong></p>
+<p>原因如下：在网络中，分类器 C1和 C2由权重差异损失的影响，会<strong>尽可能提取不同的视觉特征</strong>，而特征提取模块 E 又要确保<strong>在不同的视觉特征下都要给出正确的分割结果</strong>。这两种力量的对抗就导致了实际上要求 E 应该<strong>跨源和目标域</strong>提取像素的基本语义信息，而语义信息正是两个域之间共享的不变特征。如果没有权重差异损失（协同训练），这两种力量的对抗就会消失消失，即 E 学习领域间不变信息的能力也会减弱。</p>
+<p>另一方面，在跨域语义分割任务中，<strong>两个域在视觉级别上有很大差异，但在语义级别上有重叠</strong>。如果 E 中的 C1和 C2使用视觉级别特征作为输入，它们在目标域中的预测将是不准确的，并且往往是不同的，这将使模型的对抗损失权重急剧增大，从而受到巨大的对抗损失惩罚。因此，<strong>一旦算法收敛，C1和 C2将使用语义级特征而不是视觉级特征进行输入</strong>。<strong>也就是说，E 被鼓励学习域不变语义</strong>。</p>
+<p><strong>因此，权重差异损失是提高领域自适应能力的隐性促进因素。</strong></p>
+<h4 id="语义级对抗损失"><a href="#语义级对抗损失" class="headerlink" title="语义级对抗损失"></a>语义级对抗损失</h4><p><strong>使用自适应权值$ [λ_{local}M(p^{(1)}p^{(2)}) + ϵ]$ 扩展了传统的对抗性损失。</strong></p>
+<p>一方面，当 $M(p^{(1)}p^{(2)})$ 较大时，同一类的特征在两个域之间没有类似的联合分布：它们存在语义不一致的问题。因此，权重会主要分配在未对齐的特征上，为了鼓励 G 欺骗 D。</p>
+<p>另一方面，当 $M(p^{(1)}p^{(2)})$ 较小时，联合分布在域之间会有较大的重叠，说明语义不一致问题不严重。在这种情况下，<strong>G 往往忽略 D 的对抗性惩罚</strong> 。从 D 的观点来看<strong>，自适应权重的引入鼓励 D 从语义不一致的示例中提取更多的知识，而不是从那些对齐良好的类中。</strong>因此，在对抗训练中，<strong>CLAN 能够提高语义级别的域间一致性程度</strong>，这是影响自适应能力的一个重要因素。</p>
+<p>图中（a）表示目标域图像，橙色框里的灯柱和交通标志均属于占有像素比例较少的罕见类，也是 CLAN 方法所重点针对的类别。</p>
+<p>（b）表示未经过领域自适应的分割结果。虽然全局分割效果不佳，但可以正确分割电线杆和交通标志。它表明一些语义类别最初已经在域之间对齐，即使没有经过任何领域自适应算法。</p>
+<p>（c）表示基于传统对抗网络的领域自适应分割结果。其中从图中可以看出，传统对抗网络可以生成一个大致良好的分割结果，但电线杆和交通标志分割结果却很差。原因是传统的全局对抗策略倾向于给所有像素分配保守的预测类别，导致一些罕见类别像素被预测到其他常见类，从而导致那些不常见的特征被负迁移。</p>
+<p>（d）表示 CLAN 的分割结果。CLAN 为那些域间已经对齐了的类别减少了对抗损失的权重。结果表明，原来分割良好的罕见类被很好地保留了下来。</p>
+<p><img src="https://pic.imgdb.cn/item/62626ced239250f7c5a46619.png" alt="image-20220422165349199"></p>
+<h3 id="2-5-理论证明"><a href="#2-5-理论证明" class="headerlink" title="2.5 理论证明"></a>2.5 理论证明</h3><p>详见论文p38页(作者是罗亚威)</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/04/13/luowen-%E2%85%A1/" rel="next" title="论文学习Ⅱ">
+                <i class="fa fa-chevron-left"></i> 论文学习Ⅱ
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/05/07/Pytorch%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B/" rel="prev" title="Pytorch应用实例">
+                Pytorch应用实例 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="2822328563@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E8%AF%AD%E4%B9%89%E7%BA%A7%E5%88%AB%E5%AF%B9%E6%8A%97%E5%AD%A6%E4%B9%A0%E7%9A%84%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">基于语义级别对抗学习的领域自适应分割方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E4%BA%8E%E8%BE%B9%E7%BC%98%E5%88%86%E5%B8%83%E5%AF%B9%E9%BD%90%E7%9A%84%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C"><span class="nav-number">1.1.</span> <span class="nav-text">1.基于边缘分布对齐的对抗网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E8%B4%9F%E8%BF%81%E7%A7%BB%E7%8E%B0%E8%B1%A1"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 负迁移现象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9F%BA%E4%BA%8E%E8%AF%AD%E4%B9%89%E7%BA%A7%E5%88%AB%E5%AF%B9%E9%BD%90%E7%9A%84%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C"><span class="nav-number">1.2.</span> <span class="nav-text">2.基于语义级别对齐的对抗网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8D%8F%E5%90%8C%E8%AE%AD%E7%BB%83"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 协同训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-CLAN%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 CLAN结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Loss"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">分割损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9D%83%E9%87%8D%E5%B7%AE%E5%BC%82%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">权重差异损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.2.3.3.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E5%AF%B9%E6%8A%97%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">自适应对抗损失</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%96%B9%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 方法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E5%99%A8%E7%9A%84%E6%9D%83%E9%87%8D%E5%B7%AE%E5%BC%82%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">分类器的权重差异损失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E7%BA%A7%E5%AF%B9%E6%8A%97%E6%8D%9F%E5%A4%B1"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">语义级对抗损失</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E7%90%86%E8%AE%BA%E8%AF%81%E6%98%8E"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 理论证明</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yinghao Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

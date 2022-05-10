@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Unsupervised Domain Adaptation With Variational Approximation for Cardiac Segmentation （基于变分近似的无监督域自适应心脏分割 ）1.基本内容一览1.1 标题：基于变分近似的无监督域自适应心脏分割1.2 利用了什么方案：提出了一个新的基于VAE的框架，该框架将两个域驱动到一个参数化分布，并在显式公式中引入了变分接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文学习Ⅳ">
+<meta property="og:url" content="https://herbstlicherwind.github.io/2022/05/07/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E2%85%A3/index.html">
+<meta property="og:site_name" content="清辉夜凝">
+<meta property="og:description" content="Unsupervised Domain Adaptation With Variational Approximation for Cardiac Segmentation （基于变分近似的无监督域自适应心脏分割 ）1.基本内容一览1.1 标题：基于变分近似的无监督域自适应心脏分割1.2 利用了什么方案：提出了一个新的基于VAE的框架，该框架将两个域驱动到一个参数化分布，并在显式公式中引入了变分接">
+<meta property="og:locale">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426160425293.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426160445402.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426164318413.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426194637768.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426194712147.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426194943337.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426195023828.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426195128042.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426195206572.png">
+<meta property="og:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426181851852.png">
+<meta property="article:published_time" content="2022-05-07T10:48:33.000Z">
+<meta property="article:modified_time" content="2022-05-10T11:54:31.204Z">
+<meta property="article:author" content="Yinghao Wang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426160425293.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://herbstlicherwind.github.io/2022/05/07/论文学习Ⅳ/"/>
+
+
+
+
+
+  <title>论文学习Ⅳ | 清辉夜凝</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">清辉夜凝</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://herbstlicherwind.github.io/2022/05/07/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0%E2%85%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="清辉夜凝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文学习Ⅳ</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-05-07T18:48:33+08:00">
+                2022-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Unsupervised-Domain-Adaptation-With-Variational-Approximation-for-Cardiac-Segmentation-（基于变分近似的无监督域自适应心脏分割-）"><a href="#Unsupervised-Domain-Adaptation-With-Variational-Approximation-for-Cardiac-Segmentation-（基于变分近似的无监督域自适应心脏分割-）" class="headerlink" title="Unsupervised Domain Adaptation With Variational Approximation for Cardiac Segmentation （基于变分近似的无监督域自适应心脏分割 ）"></a>Unsupervised Domain Adaptation With Variational Approximation for Cardiac Segmentation （基于变分近似的无监督域自适应心脏分割 ）</h1><h2 id="1-基本内容一览"><a href="#1-基本内容一览" class="headerlink" title="1.基本内容一览"></a>1.<strong>基本内容一览</strong></h2><h3 id="1-1-标题：基于变分近似的无监督域自适应心脏分割"><a href="#1-1-标题：基于变分近似的无监督域自适应心脏分割" class="headerlink" title="1.1 标题：基于变分近似的无监督域自适应心脏分割"></a>1.1 标题：基于变分近似的无监督域自适应心脏分割</h3><h3 id="1-2-利用了什么方案："><a href="#1-2-利用了什么方案：" class="headerlink" title="1.2 利用了什么方案："></a>1.2 利用了什么方案：</h3><p>提出了一个新的基于<strong>VAE</strong>的框架，该框架<strong>将两个域驱动到一个参数化分布，并在显式公式中引入了变分接近的正则化</strong>。实验证明可以有效地校正分段任务中的<strong>域迁移</strong>，以实现无监督域自适应。</p>
+<h4 id="1-2-1-使用的数据集："><a href="#1-2-1-使用的数据集：" class="headerlink" title="1.2.1 使用的数据集："></a>1.2.1 使用的数据集：</h4><p>多模态全心脏分割 （MM-WHS）挑战赛数据集中的右心房血腔（RA），右心室血腔（RV），左心房血腔（LA），左心 室血腔（LV），以及左心室心肌（MYO）。采用CT图像作为源域 ，而MR图像作为目标。 </p>
+<p>多序列心脏磁共振分割（MS- CMRSeg）挑战数据集。</p>
+<h3 id="1-3-解决了什么问题："><a href="#1-3-解决了什么问题：" class="headerlink" title="1.3 解决了什么问题："></a>1.3 解决了什么问题：</h3><p>大多数的无监督域适应在医学图像分割都是将源域和目标域的图像映射到一个共同的潜在特征空间中，然后通过对抗性训练隐含地或通过直接最小化差异度量来显式地减少它们的差异，作者为了优化这类方案的效果而做出了创新。</p>
+<h2 id="2-Abstract"><a href="#2-Abstract" class="headerlink" title="2.Abstract"></a>2.Abstract</h2><blockquote>
+<p>—Unsupervised domain adaptation is useful in medical image segmentation. Particularly, when ground truths of the target images are not available, domain adap- tation can train a target-speciﬁc model by utilizing the existing labeled images from other modalities. Most of the reported works mapped images of both the source and targetdomains into a common latent featurespace, andthen reduced their discrepancy either implicitly with adversarial training or explicitly by directly minimizing a discrepancy metric. In this work, we propose a new framework, where the latent features of both domains are driven towards a common and parameterized variational form, whose conditional distribution given the image is Gaussian. This is achieved by two networks based on variational auto encoders (VAEs) and a regularization for this variational approximation. Both of the VAEs, each for one domain, contain a segmentation module, where the source segmentation is trained in a supervised  manner, while the target one is trained unsu- pervisedly. We validated the proposed domain adaptation method using two cardiac segmentation tasks, i.e., the cross-modality (CT and MR) whole heart segmentation and the cross-sequence cardiac MR segmentation. Results show that the proposedmethod achieved better accuracies compared to two state-of-the-art approaches and demon-strated good potential for cardiac segmentation. Further- more, the proposed explicit regularization was shown to be effective and efﬁcient in narrowing down the distribution gap between domains, which is useful for unsupervised domain adaptation.</p>
+</blockquote>
+<p>无监督域适应在医学图像分割中很有用。 特别是，当目标图像的基本事实不可用时，域适应可以通过利用来自其他模态的现有标记图像来训练特定于目标的模型。 大多数报告的工作将源域和目标域的图像映射到一个共同的潜在特征空间中，然后通过对抗性训练隐含地或通过直接最小化差异度量来显式地减少它们的差异。 在这项工作中，我们<strong>提出了一个新的框架</strong>，<strong>其中两个域的潜在特征被驱动到一个共同的和参数化的变分形式</strong>，其给定图像的条件分布是高斯的。 这是通过两个基于<strong>变分自动编码器 (VAE)</strong> 的网络和该变分近似的正则化来实现的。 两个 VAE，每个用于一个域，都包含一个分割模块，其中源分割以监督方式训练，而目标分割则无监督训练。 我们使用两个心脏分割任务验证了所提出的域适应方法，即<strong>跨模态（CT 和 MR）全心脏分割和跨序列心脏 MR 分割</strong>。 结果表明，与两种最先进的方法相比，所提出的方法实现了更好的准确性，并展示了心脏分割的良好潜力。 此外，所提出的显式正则化被证明在缩小域之间的分布差距方面是有效和高效的，这对于无监督域适应很有用。</p>
+<h3 id="IndexTerms"><a href="#IndexTerms" class="headerlink" title="IndexTerms"></a>IndexTerms</h3><p>Domain adaptation, variationalapproximation, explicit domain discrepancy, cardiac segmentation.</p>
+<p>域适应、变分近似、显式域差异、心脏分割。</p>
+<h2 id="部分重要内容翻译"><a href="#部分重要内容翻译" class="headerlink" title="部分重要内容翻译"></a>部分重要内容翻译</h2><p>由于在将 GAN 应用于域适应 [19] 时难以获得 GAN 中的纳什平衡点，这种技术仍然具有挑战性。</p>
+<p>有几项工作采用深度学习来开发领域差异的显式测量 [20] - [23]，通过引入矩统计或无偏估计来实现。这些工作为分类任务取得了很好的结果，但在分割方面的应用还没有得到充分的探索。</p>
+<p>最近，提出了一种基于分布特征函数的显式距离度量来进行域适应[24]。 与对抗性训练方案不同，这项工作直接最小化了显式度量，以减少来自两个域的潜在变量之间的差异。在这项工作中，我们通过变分逼近（VarDA）策略提出了一种新的心脏图像分割域适应框架。这个想法如图 1b 所示，它显示了与以前的作品不同的解决方案。具体来说，我们不是直接减少来自两个域的潜在特征的差异，而是强制这些特征的分布近似于参数化概率分布函数。近似过程可以通过变分自动编码器 (VAE) 的变体来实现。然后，可以将两个近似之间的距离作为正则化，在实验中验证其对域适应有效。</p>
+<p><strong>这项工作的主要贡献总结如下：</strong></p>
+<p> (1) 我们开发了一个新的域适应的框架，其中来自两个域的潜在特征由一个共同的和参数化的变分形式近似。该框架是使用基于变分自动编码器 (VAE) 的深度神经网络实现的。</p>
+<p> (2) 我们提出了一种显式正则化，它是根据潜在变量分布的近似值之间的距离计算的。</p>
+<p> (3) 我们使用涉及两个心脏图像分割任务的实验来验证我们的提议。在实验中，提供了与其他最先进算法的比较，并进行了参数研究。</p>
+<h2 id="3-内容框架"><a href="#3-内容框架" class="headerlink" title="3.内容框架"></a>3.内容框架</h2><p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426160425293.png" alt="image-20220426160425293" style="zoom:67%;"></p>
+<p>a）<strong>以前在潜在特征空间中的域适应性研究的框架。</strong>域被映射到一个共同的潜在特征变量z中，然后通过对抗性训练（DANN）或明确的差异度量最小化（CF distance，一种域差异度量指标，用于跨模式的心脏图像分割；MMD）来减少领域差异。X_s、X_t分别是源域、目标域图像。z是潜在的特征变量（theta以后应该是feature map参数，p以后应该是指softmax以后的output space，是概率函数）。</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426160445402.png" alt="image-20220426160445402" style="zoom:67%;"></p>
+<p>b） <strong>作者提出的，通过变异近似法（variational approximation）的域适应方法</strong>（VarDA）。</p>
+<p>两个域通过变分自动编码器（variational autoencoder/variational bayes）被驱动到参数化分布q φ S和q φ S。作者还提出了一个正则化项来约束$q_{φS}$和$qφS$为同一分布。具体来说，作者不是直接减少两个领域的潜在特征的差异，而是<strong>强迫这些特征的分布近似于一个参数化的概率分布函数</strong>。近似过程可以通过变异自动编码器（VAE）的一个变体来实现。然后，<strong>两个近似值之间的距离可以作为正则化</strong>，这在实验中被验证为对领域适应是有效的。</p>
+<p><strong>总而言之就是，作者用 <em>将源域和目标域近似于一个分布</em> 来代替 <em>减少两者差异</em>。</strong></p>
+<p><strong>==具体框架图如下==</strong></p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426164318413.png" alt="image-20220426164318413"></p>
+<p>在提出的框架中，VAE 模型需要结合分割功能，解码不能仅用于图像的重建，因此，最大化完整数据的联合对数似然（JLL）作为 VAE 的目标函数，即 JLL =$ log pθ（X,Y）$。完整的数据由图像及其分割标签组成。，由于我们没有目标图像的黄金标准分割，因此需要一个新的公式来解决目标域 VAE 的缺失标签。</p>
+<h3 id="3-1-源域的VAE"><a href="#3-1-源域的VAE" class="headerlink" title="3.1 源域的VAE"></a>3.1 源域的VAE</h3><p>所提出的 VAE 最大化了完整数据的联合对数似然。对于源数据，我们有</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426194637768.png" alt="image-20220426194637768" style="zoom:50%;"></p>
+<p>因为所有数据点都可以作为$ i.i.d$ 的样本。 随机变量，联合对数似然变成单个数据点的总和，即</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426194712147.png" alt="image-20220426194712147" style="zoom: 67%;"></p>
+<p>为了优化此生成模型p θ s (x，y)，通常采用的方法是引入潜在变量z。由于p θ s (z | x) 通常是棘手的，因此我们使用VAE通过参数化模型q φ s (z | x) 对其进行近似，可以使用神经网络轻松实现。为了推断判别模型p θ s (y | z)，我们遵循 [37] 中的分布独立性假设，即q φ s (y，z | x) = q φ s (y | x) · q φ s (z | x)。在此假设下，我们可以获得对数p θ s (x，y) 的一种新形式的变分下界，表示为LBVAE(θ s，φ s)，即：</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426194943337.png" alt="image-20220426194943337" style="zoom:67%;"></p>
+<p>由上述可得：</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426195023828.png" alt="image-20220426195023828" style="zoom:67%;"></p>
+<p>其中 DKL(q|| p) 是 q 和 p 的 KL 散度。第二项 EqφS (z|x)[log pθS (x|y, z)] 表示给定标签 y 和特征 z 的输入图像 x 的对数概率，它以 x 为条件。该术语可以通过图像重建过程来建模。第三项 EqφS (z|x)[log pθS (y|z)] 表示给定 z 的分割预测 y 的对数概率，它以 x 为条件。该术语由建议框架中的分段器建模。这个下限的证明可以在补充材料中找到。通过使用（辅助）噪声变量 [36] 的可微分变换 gφS ( , x) 重新参数化，即</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426195128042.png" alt="image-20220426195128042"></p>
+<p>我们得到了（4）中LBVAE（θS，φ S）的蒙特卡罗估计，即：</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426195206572.png" alt="image-20220426195206572"></p>
+<p>提出的域自适应方法框架。对于每个领域，构造了一个改进的VAE模型，该模型包含一个用于提取模态不变潜特征的编码器、一个用于图像重建的解码器和一个用于图像分割的分割器。用两个领域潜在特征的估计分布显式计算领域差异。</p>
+<p>该框架由三个组件组成，即 :(1) 用于源域的VAE，(2) 用于目标域的VAE，以及 (3) 用于对域差异进行正则化的模块。</p>
+<p>源域VAE由用于特征提取的编码器，用于图像重建的解码器以及用于分割的分段器组成。编码器将图像xS映射到共享的潜在特征空间中，并通过参数化模型qφ s (z | x) 近似后验概率p θ s (z | x)。共享潜空间中的随机变量分别表示为源域和目标域的zS和zT。在训练阶段，我们从后qφ (z | x) 中采样潜在特征，并将其馈送到分段和解码器的网络中。分割器输出每个像素的标签类别概率，解码器以分割标签为条件，重构输入图像。</p>
+<p>目标域 VAE 与源域具有相似的结构，只是它使用预测的分割作为解码器的标签输入。我们将两个 VAE 的目标函数分别表示为 LBVAE(θS,φS) 和 LBVAE(θT,φT)。详细信息在第 III-B 节中给出。对于域差异，可以基于前面提到的两个 VAE 模块估计 zS 和 zT 的两个变分近似值，即 qφS (z) 和 qφT (z)，从中采样分割器的输入数据。为了使这两个近似值具有相同的分布，因此我们提出了一种通过计算 qφS (z) 和 qφT 函数之间的距离来对这种差异进行正则化的方法，将其表示为 Lossdiscrepancy(qφS (z)。损失 , qφT ) 并将进行讨论在第 III-C 节中。有了上述三个分量，域自适应分割方法的总损失函数可以表示为：</p>
+<p><img src="C:/Users/86166/AppData/Roaming/Typora/typora-user-images/image-20220426181851852.png" alt="image-20220426181851852" style="zoom: 67%;"></p>
+<p>其中 ω = (θ s，φ s，θ t，φ t) 是要优化的参数，α1，α2，α3是控制三个项之间权衡的参数。在测试阶段，我们将测试图像xT输入到编码器中，并获得分布qφ t (z | x)。我们计算此分布的平均值作为训练好的分段器的输入，该分段器输出预测的分段yt</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/05/07/Pytorch%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B/" rel="next" title="Pytorch应用实例">
+                <i class="fa fa-chevron-left"></i> Pytorch应用实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="2822328563@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-fa fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Unsupervised-Domain-Adaptation-With-Variational-Approximation-for-Cardiac-Segmentation-%EF%BC%88%E5%9F%BA%E4%BA%8E%E5%8F%98%E5%88%86%E8%BF%91%E4%BC%BC%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E5%BF%83%E8%84%8F%E5%88%86%E5%89%B2-%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">Unsupervised Domain Adaptation With Variational Approximation for Cardiac Segmentation （基于变分近似的无监督域自适应心脏分割 ）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E5%86%85%E5%AE%B9%E4%B8%80%E8%A7%88"><span class="nav-number">1.1.</span> <span class="nav-text">1.基本内容一览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%87%E9%A2%98%EF%BC%9A%E5%9F%BA%E4%BA%8E%E5%8F%98%E5%88%86%E8%BF%91%E4%BC%BC%E7%9A%84%E6%97%A0%E7%9B%91%E7%9D%A3%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E5%BF%83%E8%84%8F%E5%88%86%E5%89%B2"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 标题：基于变分近似的无监督域自适应心脏分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%88%A9%E7%94%A8%E4%BA%86%E4%BB%80%E4%B9%88%E6%96%B9%E6%A1%88%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 利用了什么方案：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-%E4%BD%BF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86%EF%BC%9A"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1.2.1 使用的数据集：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 解决了什么问题：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Abstract"><span class="nav-number">1.2.</span> <span class="nav-text">2.Abstract</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IndexTerms"><span class="nav-number">1.2.1.</span> <span class="nav-text">IndexTerms</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E9%87%8D%E8%A6%81%E5%86%85%E5%AE%B9%E7%BF%BB%E8%AF%91"><span class="nav-number">1.3.</span> <span class="nav-text">部分重要内容翻译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%86%85%E5%AE%B9%E6%A1%86%E6%9E%B6"><span class="nav-number">1.4.</span> <span class="nav-text">3.内容框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%BA%90%E5%9F%9F%E7%9A%84VAE"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 源域的VAE</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yinghao Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
